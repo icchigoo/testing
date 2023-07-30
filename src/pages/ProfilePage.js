@@ -5,6 +5,7 @@ import Iconify from "../components/iconify";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "../features/auth/authSlice";
 import ProfileEditForm from "../components/Profile/ProfileEditForm";
+import MenuBar from "../components/menu/MeunBar";
 
 const ProfileCard = styled("div")(({ theme }) => ({
   padding: theme.spacing(4),
@@ -80,6 +81,7 @@ const ProfilePage = () => {
 
   return (
     <Container>
+    
       {!isEditing ? (
         <>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
@@ -90,7 +92,7 @@ const ProfilePage = () => {
               Edit Profile
             </Button>
           </Stack>
-
+          <MenuBar />
           <Grid container spacing={4}>
             {/* Left side (DeleteCard) */}
             <Grid item xs={12} sm={4}>

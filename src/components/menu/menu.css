@@ -1,0 +1,38 @@
+/* styles.css */
+.menu-tabs .MuiTabs-indicator {
+  background-color: black;
+}
+
+.menu-tabs {
+  display: flex;
+  padding: 15px;
+  overflow-x: auto; /* Allow horizontal scrolling */
+ 
+}
+
+.menu-tabs .MuiTab-root {
+  min-width: unset;
+  padding: 15px;
+}
+
+.menu-tabs .MuiTab-labelIcon {
+  min-height: 0;
+}
+
+.menu-tabs .MuiTab-labelIcon .MuiTab-wrapper {
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Increase text size for labels */
+.menu-tabs .MuiTab-wrapper {
+  font-size: 20px;
+}
+
+/* Additional styles for mobile devices */
+@media (max-width: 600px) {
+  .menu-tabs {
+    padding: 5px; /* Adjust padding for mobile */
+  }
+}
