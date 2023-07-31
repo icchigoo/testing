@@ -151,7 +151,7 @@ const AddProperty = () => {
       </Box>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
-          <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               label="Address"
@@ -205,7 +205,7 @@ const AddProperty = () => {
               }
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               label="Income"
