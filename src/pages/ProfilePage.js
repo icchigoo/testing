@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ProfileEditForm from "../components/Profile/ProfileEditForm";
 import MenuBar from "../components/menu/MeunBar";
 import General from "../components/menu/General";
+import ChangePasswordPage from "../components/menu/ChangePassword";
 
 const ProfilePage = () => {
 
@@ -66,6 +67,7 @@ const ProfilePage = () => {
           </Stack>
           <MenuBar selectedTab={selectedTab} onTabChange={handleTabChange} />
       {selectedTab === 0 && <General />}
+      {selectedTab === 1 && <ChangePasswordPage />}
         </>
       ) : (
         // Render the ProfileEditForm section if in edit mode
