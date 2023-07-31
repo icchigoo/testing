@@ -1,18 +1,9 @@
-import React, { useEffect,  } from "react";
+import React, { useEffect } from "react";
 import { styled } from "@mui/material/styles";
-import {
-  Container,
-  Avatar,
-
-  Button,
-  TextField,
-  Grid,
-
-} from "@mui/material";
+import { Container, Avatar, Button, TextField, Grid } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "../../features/auth/authSlice";
-
 
 const ProfileCard = styled("div")(({ theme }) => ({
   padding: theme.spacing(4),
@@ -53,14 +44,16 @@ const General = () => {
 
   // Access the user profile data from the Redux store
   const user = useSelector((state) => state.auth.user);
+  console.log(user);
 
   // useEffect hook to fetch the user profile data when the component mounts
   useEffect(() => {
     if (!user) {
       // Fetch the user profile data if it is not already available in the Redux store
-      dispatch(
-        fetchUser(/* Pass the user ID or any unique identifier to fetch the specific user's data */)
-      );
+      const userId = localStorage.getItem("userId");
+      if (userId) {
+        dispatch(fetchUser(userId)); // Pass the user's _id to the fetchUser action
+      }
     }
   }, [dispatch, user]);
 
@@ -96,7 +89,7 @@ const General = () => {
           <Grid item xs={12} sm={8}>
             <ProfileCard>
               <Grid container spacing={2}>
-                 <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={4}>
                   <TextField
                     fullWidth
                     label="First Name"
@@ -140,7 +133,7 @@ const General = () => {
                   <TextField
                     fullWidth
                     label="Postcode"
-                    value={user.postcode}
+                    value={user.postalCode} // Use user.postalCode instead of user.postcode
                     readOnly
                   />
                 </Grid>

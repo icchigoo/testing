@@ -1,50 +1,82 @@
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getProperty } from "../features/property/propertySlice";
+import { Link } from "react-router-dom";
+
 import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
-// @mui
-import { Container, Stack, Typography } from '@mui/material';
-// components
-import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
-// mock
-import PRODUCTS from '../_mock/products';
+import { Container, Typography, Card, Box, Link as MuiLink, Stack } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-// ----------------------------------------------------------------------
+import { Grid } from '@mui/material';
 
-export default function ProductsPage() {
-  const [openFilter, setOpenFilter] = useState(false);
+const StyledProductImg = styled('img')({
+  top: 0,
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  position: 'absolute',
+});
 
-  const handleOpenFilter = () => {
-    setOpenFilter(true);
+const PropertyList = () => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    dispatch(getProperty())
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error("Error fetching property data:", error);
+      });
+  }, [dispatch]);
+
+  const propertyState = useSelector((state) => state.property.properties);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const handleCardClick = (propertyId, index) => {
+    setSelectedImageIndex(index);
+    // Handle other card click logic if needed
   };
 
-  const handleCloseFilter = () => {
-    setOpenFilter(false);
-  };
+  const imageHeight = "250px"; // Adjust the image height as needed
 
   return (
     <>
       <Helmet>
-        <title> Dashboard: Products | Minimal UI </title>
+        <title>Property List | Your Website Name</title>
       </Helmet>
-
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
+          Property List
         </Typography>
 
-        <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <ProductFilterSidebar
-              openFilter={openFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-            />
-            <ProductSort />
-          </Stack>
-        </Stack>
+        <Grid container spacing={3}>
+          {propertyState.map((property, index) => (
+            <Grid key={index} item xs={12} sm={6} md={3}>
+              <Card>
+                <Box sx={{ pt: imageHeight, position: 'relative' }}>
+                  <StyledProductImg alt={property.name} src={property.images[selectedImageIndex]?.url} />
+                </Box>
 
-        <ProductList products={PRODUCTS} />
-        <ProductCartWidget />
+                <Stack spacing={2} sx={{ p: 3 }}>
+                  <MuiLink component={Link} to={`/admin/card-details/${property._id}`} color="inherit" underline="hover">
+                    <Typography variant="subtitle2" noWrap>
+                      {property.name || "No Name"}
+                    </Typography>
+                  </MuiLink>
+
+                  <Typography variant="subtitle1" noWrap>
+                    {property.address || "No Address"}
+                  </Typography>
+                </Stack>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </Container>
     </>
   );
-}
+};
+
+export default PropertyList;
