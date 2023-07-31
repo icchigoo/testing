@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import {} from "@mui/material/styles";
 import { Container, Typography, Button, Stack } from "@mui/material";
 import Iconify from "../components/iconify";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 
 import ProfileEditForm from "../components/Profile/ProfileEditForm";
 import MenuBar from "../components/menu/MeunBar";
 import General from "../components/menu/General";
 import ChangePasswordPage from "../components/menu/ChangePassword";
+
 
 const ProfilePage = () => {
 
@@ -15,7 +16,7 @@ const ProfilePage = () => {
   // Access the user profile data from the Redux store
   const user = useSelector((state) => state.auth.user);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedUser, setEditedUser] = useState({ ...user });
+  const [editedUser, ] = useState({ ...user });
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleEditProfile = () => {

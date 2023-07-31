@@ -24,7 +24,6 @@ const ProfileCard = styled("div")(({ theme }) => ({
   boxShadow: theme.customShadows.card,
   backgroundColor: theme.palette.background.paper,
   textAlign: "center",
-  maxWidth: 800,
 }));
 
 const DeleteCard = styled("div")(({ theme }) => ({
@@ -37,7 +36,7 @@ const DeleteCard = styled("div")(({ theme }) => ({
   boxShadow: theme.customShadows.card,
   backgroundColor: theme.palette.background.paper,
   textAlign: "center",
-  maxWidth: 500,
+
   maxHeight: 700,
 }));
 
@@ -53,10 +52,11 @@ const DropzoneContainer = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
 }));
 
-function ProfileEditForm() {
+function ProfileEditForm({onCancel}) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const imgState = useSelector((state) => state.upload.images);
+
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -139,7 +139,10 @@ function ProfileEditForm() {
         console.error("Error updating user:", error);
       });
   };
-
+  const handleCancelEdit = () => {
+    // Call the onCancel callback provided by the parent component
+    onCancel();
+  };
   return (
     <Container maxWidth>
       <Stack
@@ -154,6 +157,7 @@ function ProfileEditForm() {
         <Button
           variant="contained"
           startIcon={<Iconify icon="eva:edit-fill" />}
+          onClick={handleCancelEdit} // Corrected onClick prop
         >
           Cancel Edit
         </Button>
@@ -218,7 +222,7 @@ function ProfileEditForm() {
                   onChange={formik.handleChange}
                 />
               </Grid>
-              <Grid item xs={12} >
+              <Grid item xs={12}>
                 <TextField
                   fullWidth
                   label="Email address"
@@ -227,7 +231,7 @@ function ProfileEditForm() {
                   onChange={formik.handleChange}
                 />
               </Grid>
-              <Grid item xs={12} >
+              <Grid item xs={12}>
                 <TextField
                   fullWidth
                   label="Mobile"
@@ -236,7 +240,7 @@ function ProfileEditForm() {
                   onChange={formik.handleChange}
                 />
               </Grid>
-              <Grid item xs={12} sm= {6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label="Address"
