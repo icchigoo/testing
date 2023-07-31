@@ -278,7 +278,7 @@ function ProfileEditForm({onCancel}) {
               </Grid>
             </Grid>
 
-            <Box mt={2}>
+            <Box mt={2} style = {{display: "flex", justifyContent: "flex-end" }}>
               <Button variant="contained" onClick={formik.handleSubmit}>
                 Update User
               </Button>

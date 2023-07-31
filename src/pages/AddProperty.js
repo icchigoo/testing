@@ -98,26 +98,16 @@ const AddProperty = () => {
         <Typography variant="h4" gutterBottom>
           Add Property
         </Typography>
-        <Box
-          width={200}
-          height={200}
-          borderRadius="50%"
-          border="2px dashed grey"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-        >
-          <Dropzone onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}>
+        <Box width={200} height={200} borderRadius="50%" border="2px dashed grey">
+          <Dropzone
+            onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
+          >
             {({ getRootProps, getInputProps }) => (
               <section>
-                <Box {...getRootProps()}>
+                <Box {...getRootProps()} display="flex" alignItems="center" justifyContent="center" height="100%" >
                   <input {...getInputProps()} />
                   <Typography variant="body1" color="textSecondary" align="center">
-                    Drag 'n' drop some files here,
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary" align="center">
-                    or click to select files
+                    Drag 'n' drop some files here, or click to select files
                   </Typography>
                 </Box>
               </section>
@@ -132,7 +122,7 @@ const AddProperty = () => {
                 className="btn-close position-absolute top-3 right-3"
                 color="secondary"
               >
-            
+              
               </IconButton>
               <img src={i.url} alt="" width={200} height={200} />
             </Box>
@@ -171,9 +161,6 @@ const AddProperty = () => {
               helperText={
                 formik.touched.dateofPurchase && formik.errors.dateofPurchase
               }
-              InputLabelProps={{
-                shrink: true,
-              }}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -190,7 +177,9 @@ const AddProperty = () => {
                 formik.touched.purchaseRate &&
                 Boolean(formik.errors.purchaseRate)
               }
-              helperText={formik.touched.purchaseRate && formik.errors.purchaseRate}
+              helperText={
+                formik.touched.purchaseRate && formik.errors.purchaseRate
+              }
             />
           </Grid>
           <Grid item xs={12}>
