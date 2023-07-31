@@ -96,7 +96,7 @@ const General = () => {
           <Grid item xs={12} sm={8}>
             <ProfileCard>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                 <Grid item xs={12} sm={4}>
                   <TextField
                     fullWidth
                     label="First Name"

@@ -1,71 +1,71 @@
 import React, { useState } from "react";
-import { styled } from "@mui/material/styles";
-import { Container, Typography, Button, TextField, Grid } from "@mui/material";
-import Iconify from "../iconify";
+import { useDispatch } from "react-redux";
+import { updatePassword } from "../../features/auth/authSlice";
+import { Card, CardContent, CardHeader, TextField, Button, Grid } from "@mui/material";
 
-const ChangePasswordCard = styled("div")(({ theme }) => ({
-  padding: theme.spacing(4),
-  borderRadius: theme.shape.borderRadius,
-  boxShadow: theme.customShadows.card,
-  backgroundColor: theme.palette.background.paper,
-  textAlign: "center",
-
-}));
-
-const ChangePasswordPage = () => {
-  const [oldPassword, setOldPassword] = useState("");
+const ChangePasswordPage = ({ user }) => {
+  const dispatch = useDispatch();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSaveChanges = () => {
-    // Handle password change logic here
-    // For example: dispatch(changePassword(oldPassword, newPassword));
-    console.log("Password change logic will be handled here.");
+  const handlePasswordChange = () => {
+    if (newPassword.trim() === "") {
+      setError("Please enter a new password.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    dispatch(updatePassword(newPassword))
+      .then(() => {
+        alert("Password updated successfully");
+        setNewPassword("");
+        setConfirmPassword("");
+        setError("");
+      })
+      .catch((error) => {
+        setError(`Failed to update password: ${error.message}`);
+      });
   };
 
   return (
-    <Container>
-
-      <ChangePasswordCard>
-        <Grid container spacing={2} justifyContent="center">
+    <Card variant="outlined">
+      <CardHeader title="Change Password" />
+      <CardContent>
+        <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Old Password"
               type="password"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
               label="New Password"
-              type="password"
+              variant="outlined"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
             />
-            <Typography variant="body2" color="textSecondary">
-              <Iconify icon="feather:key" fontSize={14} color="grey" /> Password must be minimum 6+
-            </Typography>
           </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Confirm Password"
               type="password"
+              label="Confirm Password"
+              variant="outlined"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </Grid>
-          <Grid item xs={12}>
-            <Button variant="contained" onClick={handleSaveChanges}>
-              Save Changes
+          <Grid item xs={12} style={{ display: "flex", justifyContent: "flex-end" }}>
+            {error && <p className="text-red-500 mb-4">{error}</p>}
+            <Button variant="contained" color="primary" onClick={handlePasswordChange}>
+              Change Password
             </Button>
           </Grid>
         </Grid>
-      </ChangePasswordCard>
-    </Container>
+      </CardContent>
+    </Card>
   );
 };
 
