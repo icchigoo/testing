@@ -11,7 +11,7 @@ import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
-import ChangePasswordPage from './pages/ChangePassword';
+import ChangePasswordPage from './components/menu/ChangePassword';
 
 // ----------------------------------------------------------------------
 

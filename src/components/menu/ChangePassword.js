@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import { Container, Typography, Button, TextField, Grid } from "@mui/material";
-import Iconify from "../components/iconify";
+import Iconify from "../iconify";
 
 const ChangePasswordCard = styled("div")(({ theme }) => ({
   padding: theme.spacing(4),
@@ -25,9 +25,7 @@ const ChangePasswordPage = () => {
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>
-        Change Password
-      </Typography>
+
       <ChangePasswordCard>
         <Grid container spacing={2} justifyContent="center">
           <Grid item xs={12}>

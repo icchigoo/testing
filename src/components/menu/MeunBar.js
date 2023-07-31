@@ -1,13 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { AppBar, Tabs, Tab } from "@mui/material";
 import Iconify from "../iconify/Iconify";
 import "./menu.css";
 
-const MenuBar = () => {
-  const [selectedTab, setSelectedTab] = useState(0);
-
+const MenuBar = ({ selectedTab, onTabChange }) => {
   const handleTabChange = (_, newValue) => {
-    setSelectedTab(newValue);
+    onTabChange(_, newValue);
   };
 
   return (
@@ -17,8 +15,8 @@ const MenuBar = () => {
         onChange={handleTabChange}
         indicatorColor="primary"
         textColor="inherit"
-        variant="scrollable" // Set the variant to scrollable
-        scrollButtons="auto" // Automatically show scroll buttons when needed
+        variant="scrollable"
+        scrollButtons="auto"
         className="menu-tabs"
       >
         <Tab
