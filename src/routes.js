@@ -11,6 +11,7 @@ import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
+import ChangePasswordPage from './pages/ChangePassword';
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +28,7 @@ export default function Router() {
         { path: 'blog', element: <BlogPage /> },
         { path: 'register', element: <RegisterPage /> },
         { path: 'profile', element: <ProfilePage /> },
+        { path: 'password', element: <ChangePasswordPage /> },
       ],
     },
     {
