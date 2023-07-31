@@ -13,7 +13,9 @@ import {
   Grid,
   Box,
   IconButton,
+  Stack
 } from "@mui/material";
+import Iconify from "../components/iconify/Iconify";
 
 const schema = Yup.object().shape({
   address: Yup.string().required("Address is required"),
@@ -22,13 +24,6 @@ const schema = Yup.object().shape({
     .typeError("Purchase Rate must be a number")
     .required("Purchase Rate is required"),
   income: Yup.string().required("Income of Purchase is required"),
-  loan: Yup.array().of(
-    Yup.object().shape({
-      loanAmountRemaining: Yup.number().required("Loan amount is required"),
-      longTermRemaining: Yup.number().required("Long term remaining is required"),
-      interestRate: Yup.number().required("Interest rate is required"),
-    })
-  ),
 });
 
 const AddProperty = () => {
@@ -55,13 +50,6 @@ const AddProperty = () => {
       purchaseRate: "",
       images: "",
       income: "",
-      loan: [
-        {
-          loanAmountRemaining: "",
-          longTermRemaining: "",
-          interestRate: "",
-        },
-      ],
     },
     validationSchema: schema,
     onSubmit: async (values, { resetForm }) => {
@@ -75,7 +63,24 @@ const AddProperty = () => {
   });
 
   return (
+    
     <Container maxWidth="md">
+         <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="flex-end"
+            mb={5}
+          >
+       
+            <Button
+              variant="contained"
+              startIcon={<Iconify icon="eva:edit-fill" />}
+           
+             
+            >
+              Cancel
+            </Button>
+          </Stack>
       {showAlert && (
         <Box
           bgcolor="success.main"
@@ -94,9 +99,7 @@ const AddProperty = () => {
         flexDirection="column"
         py={4}
       >
-        <Typography variant="h4" gutterBottom>
-          Add Property
-        </Typography>
+       
         <Box
           width={200}
           height={200}
@@ -107,15 +110,25 @@ const AddProperty = () => {
           justifyContent="center"
           flexDirection="column"
         >
-          <Dropzone onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}>
+          <Dropzone
+            onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
+          >
             {({ getRootProps, getInputProps }) => (
               <section>
                 <Box {...getRootProps()}>
                   <input {...getInputProps()} />
-                  <Typography variant="body1" color="textSecondary" align="center">
+                  <Typography
+                    variant="body1"
+                    color="textSecondary"
+                    align="center"
+                  >
                     Drag 'n' drop some files here,
                   </Typography>
-                  <Typography variant="body1" color="textSecondary" align="center">
+                  <Typography
+                    variant="body1"
+                    color="textSecondary"
+                    align="center"
+                  >
                     or click to select files
                   </Typography>
                 </Box>
@@ -130,9 +143,7 @@ const AddProperty = () => {
                 onClick={() => dispatch(delImg(i.public_id))}
                 className="btn-close position-absolute top-3 right-3"
                 color="secondary"
-              >
-             
-              </IconButton>
+              ></IconButton>
               <img src={i.url} alt="" width={200} height={200} />
             </Box>
           ))}
@@ -140,7 +151,7 @@ const AddProperty = () => {
       </Box>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <TextField
               fullWidth
               label="Address"
@@ -189,10 +200,12 @@ const AddProperty = () => {
                 formik.touched.purchaseRate &&
                 Boolean(formik.errors.purchaseRate)
               }
-              helperText={formik.touched.purchaseRate && formik.errors.purchaseRate}
+              helperText={
+                formik.touched.purchaseRate && formik.errors.purchaseRate
+              }
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <TextField
               fullWidth
               label="Income"
@@ -205,64 +218,8 @@ const AddProperty = () => {
               helperText={formik.touched.income && formik.errors.income}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Loan Amount Remaining"
-              name="loan[0].loanAmountRemaining"
-              variant="outlined"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.loan[0].loanAmountRemaining}
-              error={
-                formik.touched["loan[0].loanAmountRemaining"] &&
-                Boolean(formik.errors.loan?.[0]?.loanAmountRemaining)
-              }
-              helperText={
-                formik.touched["loan[0].loanAmountRemaining"] &&
-                formik.errors.loan?.[0]?.loanAmountRemaining
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Long Term Remaining"
-              name="loan[0].longTermRemaining"
-              variant="outlined"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.loan[0].longTermRemaining}
-              error={
-                formik.touched["loan[0].longTermRemaining"] &&
-                Boolean(formik.errors.loan?.[0]?.longTermRemaining)
-              }
-              helperText={
-                formik.touched["loan[0].longTermRemaining"] &&
-                formik.errors.loan?.[0]?.longTermRemaining
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Interest Rate"
-              name="loan[0].interestRate"
-              variant="outlined"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.loan[0].interestRate}
-              error={
-                formik.touched["loan[0].interestRate"] &&
-                Boolean(formik.errors.loan?.[0]?.interestRate)
-              }
-              helperText={
-                formik.touched["loan[0].interestRate"] &&
-                formik.errors.loan?.[0]?.interestRate
-              }
-            />
-          </Grid>
-          <Grid item xs={12}>
+
+          <Grid item xs={12}    style={{ display: "flex", justifyContent: "flex-end" }}>
             <Button variant="contained" type="submit">
               Submit
             </Button>
