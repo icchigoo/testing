@@ -18,6 +18,8 @@ import {
   Card,
   CardContent,
   Avatar,
+  InputAdornment,
+  MenuItem
 } from "@mui/material";
 import { CameraAlt, Close } from "@mui/icons-material";
 import { Link } from "react-router-dom";
@@ -29,6 +31,9 @@ const schema = Yup.object().shape({
     .typeError("Purchase Rate must be a number")
     .required("Purchase Rate is required"),
   income: Yup.string().required("Income of Purchase is required"),
+  type: Yup.string()
+    .oneOf(["RESIDENTIAL", "COMMERCIAL", "INVESTMENT"], "Invalid property type")
+    .required("Type is required"),
 });
 
 const AddProperty = () => {
@@ -55,6 +60,7 @@ const AddProperty = () => {
       purchaseRate: "",
       images: "",
       income: "",
+      type: "",
     },
     validationSchema: schema,
     onSubmit: async (values, { resetForm }) => {
@@ -214,6 +220,15 @@ const AddProperty = () => {
                   helperText={
                     formik.touched.purchaseRate && formik.errors.purchaseRate
                   }
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <span style={{ display: "flex", alignItems: "center" }}>
+                          ${" "}
+                        </span>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -227,7 +242,34 @@ const AddProperty = () => {
                   value={formik.values.income}
                   error={formik.touched.income && Boolean(formik.errors.income)}
                   helperText={formik.touched.income && formik.errors.income}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <span style={{ display: "flex", alignItems: "center" }}>
+                          weekly
+                        </span>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Type"
+                  name="type"
+                  select
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.type}
+                  error={formik.touched.type && Boolean(formik.errors.type)}
+                  helperText={formik.touched.type && formik.errors.type}
+                >
+                  <MenuItem value="RESIDENTIAL">Residential</MenuItem>
+                  <MenuItem value="COMMERCIAL">Commercial</MenuItem>
+                  <MenuItem value="INVESTMENT">Investment</MenuItem>
+                </TextField>
               </Grid>
 
               <Grid
