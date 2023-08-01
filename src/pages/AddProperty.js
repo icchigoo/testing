@@ -133,7 +133,7 @@ const AddProperty = () => {
                         width: 160,
                         height: 160,
                         borderRadius: "50%",
-                        backgroundColor: "lightgrey(700)",
+                        backgroundColor: "textSecondary",
                         border: "2px dashed grey",
                         overflow: "hidden",
                         display: "flex",

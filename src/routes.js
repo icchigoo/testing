@@ -12,6 +12,8 @@ import DashboardAppPage from './pages/DashboardAppPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import AddProperty from './pages/AddProperty';
+import CardDetails from './pages/CardDetails';
+
 
 
 // ----------------------------------------------------------------------
@@ -30,6 +32,7 @@ export default function Router() {
         { path: 'register', element: <RegisterPage /> },
         { path: 'profile', element: <ProfilePage /> },
         { path: 'property', element: <AddProperty /> },
+        { path: '/dashboard/card-details/:productId', element: <CardDetails /> },
 
       ],
     },

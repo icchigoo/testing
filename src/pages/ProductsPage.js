@@ -65,7 +65,7 @@ const PropertyList = () => {
         <Grid container spacing={3}>
           {propertyState.map((property, index) => (
             <Grid key={index} item xs={12} sm={6} md={6}>
-              <RouterLink to={`/admin/card-details/${property._id}`} style={{ textDecoration: "none" }}>
+              <RouterLink to={`/dashboard/card-details/${property._id}`} style={{ textDecoration: "none" }}>
                 <Card>
                   <Box sx={{ pt: imageHeight, position: "relative" }}>
                     <StyledProductImg alt={property.name} src={property.images[selectedImageIndex]?.url} />
