@@ -1,0 +1,154 @@
+/* eslint-disable no-lone-blocks */
+
+      // eslint-disable-next-line no-lone-blocks
+      {/* Trying different Button toggle button */}
+      // eslint-disable-next-line no-lone-blocks
+      {/* <Grid container spacing={2} sx={{ mt: 2 }}>
+        <ToggleButtonGroup
+          value={overallFrequency}
+          exclusive
+          onChange={(e, newFrequency) => setOverallFrequency(newFrequency)}
+        >
+          <ToggleButton
+            value="weekly"
+            sx={{
+              bgcolor:
+                overallFrequency === "weekly" ? "primary.main" : "transparent",
+              color: overallFrequency === "weekly" ? "white" : "primary.main",
+            }}
+          >
+            Weekly
+          </ToggleButton>
+          <ToggleButton
+            value="fortnightly"
+            sx={{
+              bgcolor:
+                overallFrequency === "fortnightly"
+                  ? "primary.main"
+                  : "transparent",
+              color:
+                overallFrequency === "fortnightly" ? "white" : "primary.main",
+            }}
+          >
+            Fortnightly
+          </ToggleButton>
+          <ToggleButton
+            value="monthly"
+            sx={{
+              bgcolor:
+                overallFrequency === "monthly" ? "primary.main" : "transparent",
+              color: overallFrequency === "monthly" ? "white" : "primary.main",
+            }}
+          >
+            Monthly
+          </ToggleButton>
+          <ToggleButton
+            value="yearly"
+            sx={{
+              bgcolor:
+                overallFrequency === "yearly" ? "primary.main" : "transparent",
+              color: overallFrequency === "yearly" ? "white" : "primary.main",
+            }}
+          >
+            Yearly
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Grid> */}
+      {/* Trying different Button  Normal Button*/}
+
+      {/* <Grid container spacing={2} sx={{ mt: 2 }}>
+        <Grid item>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => setOverallFrequency("weekly")}
+            sx={{
+              bgcolor:
+                overallFrequency === "weekly" ? "primary.main" : "transparent",
+              color: overallFrequency === "weekly" ? "white" : "primary.main",
+            }}
+          >
+            Weekly
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => setOverallFrequency("fortnightly")}
+            sx={{
+              bgcolor:
+                overallFrequency === "fortnightly"
+                  ? "primary.main"
+                  : "transparent",
+              color:
+                overallFrequency === "fortnightly" ? "white" : "primary.main",
+            }}
+          >
+            Fortnightly
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => setOverallFrequency("monthly")}
+            sx={{
+              bgcolor:
+                overallFrequency === "monthly" ? "primary.main" : "transparent",
+              color: overallFrequency === "monthly" ? "white" : "primary.main",
+            }}
+          >
+            Monthly
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => setOverallFrequency("yearly")}
+            sx={{
+              bgcolor:
+                overallFrequency === "yearly" ? "primary.main" : "transparent",
+              color: overallFrequency === "yearly" ? "white" : "primary.main",
+            }}
+          >
+            Yearly
+          </Button>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} sx={{ mt: 2 }}>
+        <Grid item>
+          <RadioGroup
+            aria-label="Overall Frequency"
+            name="overallFrequency"
+            value={overallFrequency}
+            onChange={(e) => setOverallFrequency(e.target.value)}
+            row
+          >
+            <FormControlLabel
+              value="weekly"
+              control={<Radio />}
+              label="Weekly"
+            />
+            <FormControlLabel
+              value="fortnightly"
+              control={<Radio />}
+              label="Fortnightly"
+            />
+            <FormControlLabel
+              value="monthly"
+              control={<Radio />}
+              label="Monthly"
+            />
+            <FormControlLabel
+              value="yearly"
+              control={<Radio />}
+              label="Yearly"
+            />
+          </RadioGroup>
+        </Grid>
+      </Grid> */}
+
+      {/* Trying different Button  Button Group*/}
