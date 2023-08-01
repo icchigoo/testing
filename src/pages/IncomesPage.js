@@ -21,8 +21,14 @@ import {
   Select,
   MenuItem,
   Stack,
+  ToggleButtonGroup,
+  ToggleButton,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
+  ButtonGroup
 } from "@mui/material";
-import { AiFillCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
+
 import { BsTrash } from "react-icons/bs";
 import Iconify from "../components/iconify";
 
@@ -332,6 +338,60 @@ const IncomePage = () => {
         <Typography sx={{ color: "green" }}>Successfully added!</Typography>
       )}
 
+                {/* Trying different Button toggle button */}
+      <Grid container spacing={2} sx={{ mt: 2 }}>
+        <ToggleButtonGroup
+          value={overallFrequency}
+          exclusive
+          onChange={(e, newFrequency) => setOverallFrequency(newFrequency)}
+        >
+          <ToggleButton
+            value="weekly"
+            sx={{
+              bgcolor:
+                overallFrequency === "weekly" ? "primary.main" : "transparent",
+              color: overallFrequency === "weekly" ? "white" : "primary.main",
+            }}
+          >
+            Weekly
+          </ToggleButton>
+          <ToggleButton
+            value="fortnightly"
+            sx={{
+              bgcolor:
+                overallFrequency === "fortnightly"
+                  ? "primary.main"
+                  : "transparent",
+              color:
+                overallFrequency === "fortnightly" ? "white" : "primary.main",
+            }}
+          >
+            Fortnightly
+          </ToggleButton>
+          <ToggleButton
+            value="monthly"
+            sx={{
+              bgcolor:
+                overallFrequency === "monthly" ? "primary.main" : "transparent",
+              color: overallFrequency === "monthly" ? "white" : "primary.main",
+            }}
+          >
+            Monthly
+          </ToggleButton>
+          <ToggleButton
+            value="yearly"
+            sx={{
+              bgcolor:
+                overallFrequency === "yearly" ? "primary.main" : "transparent",
+              color: overallFrequency === "yearly" ? "white" : "primary.main",
+            }}
+          >
+            Yearly
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
+         {/* Trying different Button  Normal Button*/}
+
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid item>
           <Button
@@ -393,6 +453,49 @@ const IncomePage = () => {
           </Button>
         </Grid>
       </Grid>
+
+
+      <Grid container spacing={2} sx={{ mt: 2 }}>
+      <Grid item>
+        <RadioGroup
+          aria-label="Overall Frequency"
+          name="overallFrequency"
+          value={overallFrequency}
+          onChange={(e) => setOverallFrequency(e.target.value)}
+          row
+        >
+          <FormControlLabel value="weekly" control={<Radio />} label="Weekly" />
+          <FormControlLabel value="fortnightly" control={<Radio />} label="Fortnightly" />
+          <FormControlLabel value="monthly" control={<Radio />} label="Monthly" />
+          <FormControlLabel value="yearly" control={<Radio />} label="Yearly" />
+        </RadioGroup>
+      </Grid>
+    </Grid>
+
+         {/* Trying different Button  Button Group*/}
+
+    <ButtonGroup variant="contained" color="primary" aria-label="Frequency">
+      <Button onClick={() => setOverallFrequency("weekly")} sx={{ bgcolor: overallFrequency === "weekly" ? "primary.main" : "transparent", color: overallFrequency === "weekly" ? "white" : "primary.main" }}>
+        Weekly
+      </Button>
+      <Button onClick={() => setOverallFrequency("fortnightly")} sx={{ bgcolor: overallFrequency === "fortnightly" ? "primary.main" : "transparent", color: overallFrequency === "fortnightly" ? "white" : "primary.main" }}>
+        Fortnightly
+      </Button>
+      <Button onClick={() => setOverallFrequency("monthly")} sx={{ bgcolor: overallFrequency === "monthly" ? "primary.main" : "transparent", color: overallFrequency === "monthly" ? "white" : "primary.main" }}>
+        Monthly
+      </Button>
+      <Button onClick={() => setOverallFrequency("yearly")} sx={{ bgcolor: overallFrequency === "yearly" ? "primary.main" : "transparent", color: overallFrequency === "yearly" ? "white" : "primary.main" }}>
+        Yearly
+      </Button>
+    </ButtonGroup>
+
+
+
+    
+
+
+    
+
 
       <form onSubmit={handleAllIncomesSubmit}>
         <TableContainer component={Paper} sx={{ mt: 4 }}>
