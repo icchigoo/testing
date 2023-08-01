@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import Dropzone from "react-dropzone";
+
 import { delImg, uploadImg } from "../features/upload/uploadSlice";
 import { createProperty } from "../features/property/propertySlice";
 import {
@@ -13,9 +14,13 @@ import {
   Grid,
   Box,
   IconButton,
-  Stack
+  Stack,
+  Card,
+  CardContent,
+  Avatar,
 } from "@mui/material";
-import Iconify from "../components/iconify/Iconify";
+import { CameraAlt, Close } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 const schema = Yup.object().shape({
   address: Yup.string().required("Address is required"),
@@ -63,169 +68,181 @@ const AddProperty = () => {
   });
 
   return (
-    
-    <Container maxWidth="md">
-         <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="flex-end"
-            mb={5}
-          >
-       
-            <Button
-              variant="contained"
-              startIcon={<Iconify icon="eva:edit-fill" />}
-           
-             
-            >
-              Cancel
-            </Button>
-          </Stack>
-      {showAlert && (
-        <Box
-          bgcolor="success.main"
-          color="success.contrastText"
-          p={2}
-          mb={4}
-          borderRadius={4}
-        >
-          Property created successfully!
-        </Box>
-      )}
-      <Box
-        display="flex"
-        justifyContent="center"
+    <Container>
+      <Stack
+        direction="row"
         alignItems="center"
-        flexDirection="column"
-        py={4}
+        justifyContent="space-between"
+        mb={5}
       >
-       
-        <Box
-          width={200}
-          height={200}
-          borderRadius="50%"
-          border="2px dashed grey"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-        >
-          <Dropzone
-            onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
-          >
-            {({ getRootProps, getInputProps }) => (
-              <section>
-                <Box {...getRootProps()}>
-                  <input {...getInputProps()} />
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    align="center"
-                  >
-                    Drag 'n' drop some files here,
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    align="center"
-                  >
-                    or click to select files
-                  </Typography>
-                </Box>
-              </section>
-            )}
-          </Dropzone>
-        </Box>
-        <Box display="flex" gap={2} mt={2}>
-          {imgState?.map((i, j) => (
-            <Box position="relative" key={j}>
-              <IconButton
-                onClick={() => dispatch(delImg(i.public_id))}
-                className="btn-close position-absolute top-3 right-3"
-                color="secondary"
-              ></IconButton>
-              <img src={i.url} alt="" width={200} height={200} />
+        <Typography variant="h4" gutterBottom>
+          Property
+        </Typography>
+        <Button component={Link} to="/dashboard/products" variant="contained">
+          Back
+        </Button>
+      </Stack>
+      <Card elevation={3}>
+        <CardContent>
+          {showAlert && (
+            <Box
+              bgcolor="success.main"
+              color="success.contrastText"
+              p={2}
+              mb={4}
+              borderRadius={4}
+            >
+              Property created successfully!
             </Box>
-          ))}
-        </Box>
-      </Box>
-      <form onSubmit={formik.handleSubmit}>
-        <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Address"
-              name="address"
-              variant="outlined"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.address}
-              error={formik.touched.address && Boolean(formik.errors.address)}
-              helperText={formik.touched.address && formik.errors.address}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Date of Purchase"
-              type="date"
-              name="dateofPurchase"
-              variant="outlined"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.dateofPurchase}
-              error={
-                formik.touched.dateofPurchase &&
-                Boolean(formik.errors.dateofPurchase)
-              }
-              helperText={
-                formik.touched.dateofPurchase && formik.errors.dateofPurchase
-              }
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Purchase Rate"
-              type="number"
-              name="purchaseRate"
-              variant="outlined"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.purchaseRate}
-              error={
-                formik.touched.purchaseRate &&
-                Boolean(formik.errors.purchaseRate)
-              }
-              helperText={
-                formik.touched.purchaseRate && formik.errors.purchaseRate
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Income"
-              name="income"
-              variant="outlined"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.income}
-              error={formik.touched.income && Boolean(formik.errors.income)}
-              helperText={formik.touched.income && formik.errors.income}
-            />
-          </Grid>
+          )}
+          <Box py={2}>
+            <Typography variant="h5" gutterBottom>
+              Add Property
+            </Typography>
+            <Typography variant="body1" color="textSecondary">
+              Please fill in the details below to add a new property.
+            </Typography>
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            flexDirection="column"
+            py={4}
+          >
+            <Dropzone
+              onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
+            >
+              {({ getRootProps, getInputProps }) => (
+                <section>
+                  <Box {...getRootProps()} style={{ position: "relative" }}>
+                    <input {...getInputProps()} />
+                    <Avatar
+                      src={
+                        imgState.length > 0
+                          ? imgState[imgState.length - 1].url
+                          : ""
+                      }
+                      sx={{
+                        width: 160,
+                        height: 160,
+                        borderRadius: "50%",
+                        backgroundColor: "lightgrey(700)",
+                        border: "2px dashed grey",
+                        overflow: "hidden",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {imgState.length === 0 ? (
+                        <CameraAlt fontSize="large" color="action" />
+                      ) : null}
+                    </Avatar>
+                  </Box>
 
-          <Grid item xs={12}    style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button variant="contained" type="submit">
-              Submit
-            </Button>
-          </Grid>
-        </Grid>
-      </form>
+                  {imgState.length > 0 && (
+                    <IconButton
+                      onClick={() =>
+                        dispatch(
+                          delImg(imgState[imgState.length - 1].public_id)
+                        )
+                      }
+                      sx={{ position: "absolute", top: 5, right: 5 }}
+                    >
+                      <Close fontSize="small" />
+                    </IconButton>
+                  )}
+                </section>
+              )}
+            </Dropzone>
+          </Box>
+          <form onSubmit={formik.handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Address"
+                  name="address"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.address}
+                  error={
+                    formik.touched.address && Boolean(formik.errors.address)
+                  }
+                  helperText={formik.touched.address && formik.errors.address}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Date of Purchase"
+                  type="date"
+                  name="dateofPurchase"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.dateofPurchase}
+                  error={
+                    formik.touched.dateofPurchase &&
+                    Boolean(formik.errors.dateofPurchase)
+                  }
+                  helperText={
+                    formik.touched.dateofPurchase &&
+                    formik.errors.dateofPurchase
+                  }
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Purchase Rate"
+                  type="number"
+                  name="purchaseRate"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.purchaseRate}
+                  error={
+                    formik.touched.purchaseRate &&
+                    Boolean(formik.errors.purchaseRate)
+                  }
+                  helperText={
+                    formik.touched.purchaseRate && formik.errors.purchaseRate
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Income"
+                  name="income"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.income}
+                  error={formik.touched.income && Boolean(formik.errors.income)}
+                  helperText={formik.touched.income && formik.errors.income}
+                />
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                style={{ display: "flex", justifyContent: "flex-end" }}
+              >
+                <Button variant="contained" color="primary" type="submit">
+                  Submit
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </CardContent>
+      </Card>
     </Container>
   );
 };
