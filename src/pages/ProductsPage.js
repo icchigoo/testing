@@ -74,7 +74,7 @@ const PropertyList = () => {
 
         <Grid container spacing={3}>
           {propertyState.map((property, index) => (
-            <Grid key={index} item xs={12} sm={6} md={3}>
+            <Grid key={index} item xs={12} sm={6} md={6}>
               <Card>
                 <Box sx={{ pt: imageHeight, position: "relative" }}>
                   <StyledProductImg
