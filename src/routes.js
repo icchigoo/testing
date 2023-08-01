@@ -13,6 +13,8 @@ import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import AddProperty from './pages/AddProperty';
 import CardDetails from './pages/CardDetails';
+import ExpensesPage from './pages/ExpensesPage';
+import IncomePage from './pages/IncomesPage';
 
 
 
@@ -32,6 +34,8 @@ export default function Router() {
         { path: 'register', element: <RegisterPage /> },
         { path: 'profile', element: <ProfilePage /> },
         { path: 'property', element: <AddProperty /> },
+        { path: 'expenses', element: <ExpensesPage /> },
+        { path: 'incomes', element: <IncomePage /> },
         { path: '/dashboard/card-details/:productId', element: <CardDetails /> },
 
       ],

@@ -41,6 +41,16 @@ const navConfig = [
     path: '/dashboard/profile',
     icon: icon('ic_lock'),
   },
+  {
+    title: 'expenses',
+    path: '/dashboard/expenses',
+    icon: icon('ic_lock'),
+  },
+  {
+    title: 'incomes',
+    path: '/dashboard/incomes',
+    icon: icon('ic_lock'),
+  },
  
 
 
