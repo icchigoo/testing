@@ -288,7 +288,7 @@ const IncomePage = () => {
               <MenuItem value="yearly">Yearly</MenuItem>
             </Select>
           </TableCell>
-          <TableCell sx={{ width: "25%" }}>
+          <TableCell >
             <TextField
               type="number"
               value={income.value}

@@ -284,7 +284,7 @@ const ExpensesPage = () => {
               <MenuItem value="yearly">Yearly</MenuItem>
             </Select>
           </TableCell>
-          <TableCell sx={{ width: "25%" }}>
+          <TableCell>
             <TextField
               type="number"
               value={expense.value}
@@ -293,9 +293,11 @@ const ExpensesPage = () => {
               fullWidth
             />
           </TableCell>
-          <TableCell sx={{ width: "15%" }}>${Math.round(total * 100) / 100}</TableCell>
+          <TableCell sx={{ width: "15%" }}>
+            ${Math.round(total * 100) / 100}
+          </TableCell>
           <TableCell>
-            <IconButton size="small" onClick={() => handleRemoveExpense(index)}>
+            <IconButton size="small" onClick={() =>handleRemoveExpense(expenseCategory, index)}>
               <Iconify icon={"ant-design:delete-filled"} />
             </IconButton>
           </TableCell>
