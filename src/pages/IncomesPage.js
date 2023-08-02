@@ -73,8 +73,8 @@ const IncomePage = () => {
     setIsAddSingleIncomeOpen(false);
     setSingleIncomeLabel("");
     setSingleIncomeFrequency("weekly");
-
-    handleIncomeAdded();
+  
+    setShowAlert(false); // Set showAlert to false when canceling
   };
 
   const handleSingleIncomeSubmit = (e) => {
