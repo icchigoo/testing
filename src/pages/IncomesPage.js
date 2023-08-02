@@ -417,42 +417,40 @@ const IncomePage = () => {
         <DialogTitle>Add New Income</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSingleIncomeSubmit}>
-            <form onSubmit={handleSingleIncomeSubmit}>
-              <Grid container spacing={2} alignItems="center">
-                <Grid item xs={12}>
-                  <TextField
-                    label="Label"
-                    variant="outlined"
-                    value={singleIncomeLabel}
-                    onChange={(e) => setSingleIncomeLabel(e.target.value)}
-                    required
-                    fullWidth
-                  />
-                </Grid>
-
-                <Grid item>
-                  <Button
-                    type="button"
-                    variant="contained"
-                    onClick={handleCancelAddIncome}
-                    sx={{
-                      bgcolor: "red",
-                      color: "white",
-                      "&:hover": {
-                        bgcolor: "#ff0000", // Red color for hover state
-                      },
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Button type="submit" variant="contained" color="primary">
-                    Save
-                  </Button>
-                </Grid>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item xs={12}>
+                <TextField
+                  label="Label"
+                  variant="outlined"
+                  value={singleIncomeLabel}
+                  onChange={(e) => setSingleIncomeLabel(e.target.value)}
+                  required
+                  fullWidth
+                />
               </Grid>
-            </form>
+
+              <Grid item>
+                <Button
+                  type="button"
+                  variant="contained"
+                  onClick={handleCancelAddIncome}
+                  sx={{
+                    bgcolor: "red",
+                    color: "white",
+                    "&:hover": {
+                      bgcolor: "#ff0000", // Red color for hover state
+                    },
+                  }}
+                >
+                  Cancel
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button type="submit" variant="contained" color="primary">
+                  Save
+                </Button>
+              </Grid>
+            </Grid>
           </form>
         </DialogContent>
       </Dialog>
