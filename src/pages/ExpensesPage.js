@@ -6,7 +6,29 @@ import {
 } from "../features/expenses/expensesSlice";
 import { DEFAULT_HOUSE_HOLD_EXPENSES } from "../assets/incomeAndExpenses";
 import { AiFillCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
-import { BsTrash } from "react-icons/bs";
+import {
+  Typography,
+  Container,
+  Button,
+  TextField,
+  Grid,
+  Paper,
+  Table,
+  TableContainer,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Select,
+  Stack,
+  ButtonGroup,
+  IconButton,
+  MenuItem,
+} from "@mui/material";
+
+import Iconify from "../components/iconify";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 
 const ExpensesPage = () => {
   const dispatch = useDispatch();
@@ -56,7 +78,7 @@ const ExpensesPage = () => {
     setSingleExpenseLabel("");
     setSingleExpenseFrequency("weekly");
 
-    handleExpenseAdded();
+    setShowAlert(false);
   };
 
   const handleSingleExpenseSubmit = (e) => {
@@ -89,7 +111,6 @@ const ExpensesPage = () => {
       setShowAlert(false);
     }, 2000);
   };
-
 
   const handleRemoveExpense = (category, index) => {
     setFormData((prevData) => {
@@ -248,218 +269,226 @@ const ExpensesPage = () => {
       };
 
       return (
-        <tr key={expense.key}>
-          <td className="border px-4 py-2">
-            <BsTrash
-              onClick={() => handleRemoveExpense(expenseCategory, index)}
-              className="text-red-500 cursor-pointer"
-            />
-          </td>
-          <td className="border px-4 py-2">
-            <span>{expense.label}</span>
-          </td>
-          <td className="border px-4 py-2">
-            <select
+        <TableRow key={expense.key}>
+          <TableCell sx={{ width: "30%" }}>{expense.label}</TableCell>
+          <TableCell sx={{ width: "20%" }}>
+            <Select
               value={expense.frequency}
               onChange={handleFrequencyChange}
-              className="w-full p-2 border rounded"
+              variant="outlined"
+              fullWidth
             >
-              <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
-              <option value="fortnightly">Fortnightly</option>
-              <option value="yearly">Yearly</option>
-            </select>
-          </td>
-          <td className="border px-4 py-2">
-            <input
+              <MenuItem value="weekly">Weekly</MenuItem>
+              <MenuItem value="monthly">Monthly</MenuItem>
+              <MenuItem value="fortnightly">Fortnightly</MenuItem>
+              <MenuItem value="yearly">Yearly</MenuItem>
+            </Select>
+          </TableCell>
+          <TableCell sx={{ width: "25%" }}>
+            <TextField
               type="number"
               value={expense.value}
               onChange={handleValueChange}
-              className="w-full p-2 border rounded"
+              variant="outlined"
+              fullWidth
             />
-          </td>
-          <td className="border px-4 py-2">${Math.round(total * 100) / 100}</td>
-        </tr>
+          </TableCell>
+          <TableCell sx={{ width: "15%" }}>${Math.round(total * 100) / 100}</TableCell>
+          <TableCell>
+            <IconButton size="small" onClick={() => handleRemoveExpense(index)}>
+              <Iconify icon={"ant-design:delete-filled"} />
+            </IconButton>
+          </TableCell>
+        </TableRow>
       );
     });
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Household Expenses</h2>
+    <Container>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        mb={5}
+      >
+        <Typography variant="h4" gutterBottom>
+          Household Expenses
+        </Typography>
         {!isAddSingleExpenseOpen ? (
-          <button
-            onClick={handleAddSingleExpense}
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-          >
-            <AiFillCheckCircle className="mr-2" />
-            Add Expense
-          </button>
+          <Button variant="contained" onClick={handleAddSingleExpense}>
+            Add
+          </Button>
         ) : (
-          <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-            <div className="bg-white p-4 rounded-md shadow-md">
-              <h3 className="text-lg font-semibold mb-2">Add Expense</h3>
+          <Dialog
+            open={isAddSingleExpenseOpen}
+            onClose={handleCancelAddExpense}
+          >
+            <DialogTitle>Add New Income</DialogTitle>
+            <DialogContent>
               <form onSubmit={handleSingleExpenseSubmit}>
-                <div className="mb-2">
-                  <label
-                    htmlFor="single-category"
-                    className="block font-semibold mb-1"
-                  >
-                    Category
-                  </label>
-                  <select
-                    id="single-category"
-                    name="category"
-                    value={singleExpenseCategory}
-                    onChange={(e) => setSingleExpenseCategory(e.target.value)}
-                    className="w-full p-2 border rounded"
-                    required
-                  >
-                    <option value="">Select Category</option>
-                    <option value="livingExpenses">Living Expenses</option>
-                    <option value="entertainmentExpenses">
-                      Entertainment Expenses
-                    </option>
-                    <option value="transportExpenses">
-                      Transport Expenses
-                    </option>
-                    <option value="houseExpenses">House Expenses</option>
-                  </select>
-                </div>
-                <div className="mb-2">
-                  <label
-                    htmlFor="single-label"
-                    className="block font-semibold mb-1"
-                  >
-                    Label
-                  </label>
-                  <input
-                    type="text"
-                    id="single-label"
-                    name="label"
-                    value={singleExpenseLabel}
-                    onChange={(e) => setSingleExpenseLabel(e.target.value)}
-                    className="w-full p-2 border rounded"
-                    required
-                  />
-                </div>
-                <div className="flex justify-between">
-                  <button
-                    type="button"
-                    onClick={handleCancelAddExpense}
-                    className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 ml-0"
-                  >
-                    <AiOutlineCloseCircle className="mr-10" />
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
-                  >
-                    <AiFillCheckCircle className="mr-1" />
-                    Save
-                  </button>
-                </div>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Category"
+                      variant="outlined"
+                      value={singleExpenseCategory}
+                      onChange={(e) => setSingleExpenseCategory(e.target.value)}
+                      select
+                      fullWidth
+                      required
+                    >
+                      <MenuItem value="">Select Category</MenuItem>
+                      <MenuItem value="livingExpenses">
+                        Living Expenses
+                      </MenuItem>
+                      <MenuItem value="entertainmentExpenses">
+                        Entertainment Expenses
+                      </MenuItem>
+                      <MenuItem value="transportExpenses">
+                        Transport Expenses
+                      </MenuItem>
+                      <MenuItem value="houseExpenses">House Expenses</MenuItem>
+                    </TextField>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Label"
+                      variant="outlined"
+                      value={singleExpenseLabel}
+                      onChange={(e) => setSingleExpenseLabel(e.target.value)}
+                      required
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      type="button"
+                      variant="contained"
+                      onClick={handleCancelAddExpense}
+                      sx={{
+                        bgcolor: "red",
+                        color: "white",
+                        "&:hover": {
+                          bgcolor: "#ff0000",
+                        },
+                      }}
+                      fullWidth
+                    >
+                      Cancel
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                    >
+                      Save
+                    </Button>
+                  </Grid>
+                </Grid>
               </form>
-            </div>
-          </div>
+            </DialogContent>
+          </Dialog>
         )}
-      </div>
+      </Stack>
 
       {/* Loading indicator */}
-      {isLoading && <div>Loading...</div>}
+      {/* {isLoading && <div>Loading...</div>} */}
 
       {showAlert && (
-        <div className="fixed inset-x-0 bottom-0 flex justify-center items-center">
-          <div className="bg-green-500 text-white py-2 px-4 rounded">
-            Successfully added!
-          </div>
-        </div>
+        <Typography sx={{ color: "green" }}>Successfully added!</Typography>
       )}
 
-      <div className="mt-4">
-        <div className="flex space-x-4">
-          <button
-            className={`${
-              overallFrequency === "weekly"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-gray-700"
-            } py-2 px-4 rounded hover:bg-blue-600`}
-            onClick={() => setOverallFrequency("weekly")}
-          >
-            Weekly
-          </button>
-          <button
-            className={`${
+      <ButtonGroup variant="contained" color="primary" aria-label="Frequency">
+        <Button
+          onClick={() => setOverallFrequency("weekly")}
+          sx={{
+            bgcolor:
+              overallFrequency === "weekly" ? "primary.main" : "transparent",
+            color: overallFrequency === "weekly" ? "white" : "primary.main",
+          }}
+        >
+          Weekly
+        </Button>
+        <Button
+          onClick={() => setOverallFrequency("fortnightly")}
+          sx={{
+            bgcolor:
               overallFrequency === "fortnightly"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-gray-700"
-            } py-2 px-4 rounded hover:bg-blue-600`}
-            onClick={() => setOverallFrequency("fortnightly")}
-          >
-            Fortnightly
-          </button>
-          <button
-            className={`${
-              overallFrequency === "monthly"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-gray-700"
-            } py-2 px-4 rounded hover:bg-blue-600`}
-            onClick={() => setOverallFrequency("monthly")}
-          >
-            Monthly
-          </button>
-          <button
-            className={`${
-              overallFrequency === "yearly"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-gray-700"
-            } py-2 px-4 rounded hover:bg-blue-600`}
-            onClick={() => setOverallFrequency("yearly")}
-          >
-            Yearly
-          </button>
-        </div>
-      </div>
+                ? "primary.main"
+                : "transparent",
+            color:
+              overallFrequency === "fortnightly" ? "white" : "primary.main",
+          }}
+        >
+          Fortnightly
+        </Button>
+        <Button
+          onClick={() => setOverallFrequency("monthly")}
+          sx={{
+            bgcolor:
+              overallFrequency === "monthly" ? "primary.main" : "transparent",
+            color: overallFrequency === "monthly" ? "white" : "primary.main",
+          }}
+        >
+          Monthly
+        </Button>
+        <Button
+          onClick={() => setOverallFrequency("yearly")}
+          sx={{
+            bgcolor:
+              overallFrequency === "yearly" ? "primary.main" : "transparent",
+            color: overallFrequency === "yearly" ? "white" : "primary.main",
+          }}
+        >
+          Yearly
+        </Button>
+      </ButtonGroup>
 
       <form onSubmit={handleAllExpensesSubmit}>
         {Object.entries(formData).map(([category, expenses]) => (
-          <div key={category} className="mt-8">
-            <h3 className="text-lg font-semibold mb-2">{category}</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr>
-                    <th className="border px-4 py-2 w-1/6"></th>
-                    <th className="border px-4 py-2 w-1/3">Label</th>
-                    <th className="border px-4 py-2 w-1/6">Frequency</th>
-                    <th className="border px-4 py-2 w-1/6">Value</th>
-                    <th className="border px-4 py-2 w-1/6">Total</th>
-                  </tr>
-                </thead>
-                <tbody>{renderExpenses(category)}</tbody>
-              </table>
-            </div>
+          <div key={category} sx={{ mt: 8 }}>
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
+              {category}
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 600 }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Title</TableCell>
+                    <TableCell>Frequency</TableCell>
+                    <TableCell>Value</TableCell>
+                    <TableCell>Total</TableCell>
+                    <TableCell></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>{renderExpenses(category)}</TableBody>
+              </Table>
+            </TableContainer>
           </div>
         ))}
 
-        <div className="mt-8 flex justify-between">
-          <div>
-            <h3 className="text-lg font-semibold">Total Expenses</h3>
-            <p className="font-semibold">
+        <Grid container spacing={2} sx={{ mt: 4 }}>
+          <Grid item>
+            <Typography variant="subtitle1">
               Total: ${Math.round(calculateTotal() * 100) / 100}
-            </p>
-          </div>
-          <button
-            type="submit"
-            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+            </Typography>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{ display: "flex", justifyContent: "flex-end" }}
           >
-            Save All Expenses
-          </button>
-        </div>
+            <Button type="submit" variant="contained" color="primary">
+              Save
+            </Button>
+          </Grid>
+        </Grid>
       </form>
-    </div>
+    </Container>
   );
 };
 

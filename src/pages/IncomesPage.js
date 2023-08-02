@@ -22,12 +22,12 @@ import {
   Stack,
   ButtonGroup,
   IconButton,
+  MenuItem,
 } from "@mui/material";
 
 import Iconify from "../components/iconify";
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { CircularProgress } from "@mui/material";
-
 
 const IncomePage = () => {
   const dispatch = useDispatch();
@@ -74,7 +74,7 @@ const IncomePage = () => {
     setIsAddSingleIncomeOpen(false);
     setSingleIncomeLabel("");
     setSingleIncomeFrequency("weekly");
-  
+
     setShowAlert(false); // Set showAlert to false when canceling
   };
 
@@ -273,40 +273,40 @@ const IncomePage = () => {
       };
 
       return (
-          <TableRow key={income.key}> 
-            <TableCell>{income.label}</TableCell>
-            <TableCell>
-              <Select
-                value={income.frequency}
-                onChange={handleFrequencyChange}
-                variant="outlined"
-                fullWidth
-              >
-                <option value="weekly">Weekly</option>
-                <option value="monthly">Monthly</option>
-                <option value="fortnightly">Fortnightly</option>
-                <option value="yearly">Yearly</option>
-              </Select>
-            </TableCell>
-            <TableCell>
-              <TextField
-                type="number"
-                value={income.value}
-                onChange={handleValueChange}
-                variant="outlined"
-                fullWidth
-              />
-            </TableCell>
-            <TableCell>${Math.round(total * 100) / 100}</TableCell>
-            <TableCell>
-              <IconButton size="small" onClick={() => handleRemoveIncome(index)}>
-                <Iconify icon={"ant-design:delete-filled"} />
-              </IconButton>
-            </TableCell>
-          </TableRow>
-        );
-      });
-    };
+        <TableRow key={income.key}>
+         <TableCell sx={{ width: "30%" }}>{income.label}</TableCell>
+         <TableCell sx={{ width: "20%" }}>
+            <Select
+              value={income.frequency}
+              onChange={handleFrequencyChange}
+              variant="outlined"
+              fullWidth
+            >
+              <MenuItem value="weekly">Weekly</MenuItem>
+              <MenuItem value="monthly">Monthly</MenuItem>
+              <MenuItem value="fortnightly">Fortnightly</MenuItem>
+              <MenuItem value="yearly">Yearly</MenuItem>
+            </Select>
+          </TableCell>
+          <TableCell sx={{ width: "25%" }}>
+            <TextField
+              type="number"
+              value={income.value}
+              onChange={handleValueChange}
+              variant="outlined"
+              fullWidth
+            />
+          </TableCell>
+          <TableCell sx={{ width: "15%" }}>${Math.round(total * 100) / 100}</TableCell>
+          <TableCell>
+            <IconButton size="small" onClick={() => handleRemoveIncome(index)}>
+              <Iconify icon={"ant-design:delete-filled"} />
+            </IconButton>
+          </TableCell>
+        </TableRow>
+      );
+    });
+  };
   return (
     <Container>
       <Stack
