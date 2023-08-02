@@ -21,16 +21,12 @@ import {
   Select,
   MenuItem,
   Stack,
-  ToggleButtonGroup,
-  ToggleButton,
-  RadioGroup,
-  Radio,
-  FormControlLabel,
   ButtonGroup,
+  IconButton,
 } from "@mui/material";
 
-import { BsTrash } from "react-icons/bs";
 import Iconify from "../components/iconify";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 
 const IncomePage = () => {
   const dispatch = useDispatch();
@@ -276,38 +272,37 @@ const IncomePage = () => {
       };
 
       return (
-        <tr key={income.key}>
-          <td className="border px-4 py-2">
-            <BsTrash
-              onClick={() => handleRemoveIncome(index)}
-              className="text-red-500 cursor-pointer"
-            />
-          </td>
-          <td className="border px-4 py-2">
-            <span>{income.label}</span>
-          </td>
-          <td className="border px-4 py-2">
-            <select
+        <TableRow key={income.key}>
+          <TableCell>{income.label}</TableCell>
+          <TableCell>
+            <Select
               value={income.frequency}
               onChange={handleFrequencyChange}
-              className="w-full p-2 border rounded"
+              variant="outlined"
+              fullWidth
             >
               <option value="weekly">Weekly</option>
               <option value="monthly">Monthly</option>
               <option value="fortnightly">Fortnightly</option>
               <option value="yearly">Yearly</option>
-            </select>
-          </td>
-          <td className="border px-4 py-2">
-            <input
+            </Select>
+          </TableCell>
+          <TableCell>
+            <TextField
               type="number"
               value={income.value}
               onChange={handleValueChange}
-              className="w-full p-2 border rounded"
+              variant="outlined"
+              fullWidth
             />
-          </td>
-          <td className="border px-4 py-2">${Math.round(total * 100) / 100}</td>
-        </tr>
+          </TableCell>
+          <TableCell>${Math.round(total * 100) / 100}</TableCell>{" "}
+          <TableCell>
+            <IconButton size="small" onClick={() => handleRemoveIncome(index)}>
+              <Iconify icon={"ant-design:delete-filled"} />
+            </IconButton>
+          </TableCell>
+        </TableRow>
       );
     });
   };
@@ -386,14 +381,14 @@ const IncomePage = () => {
 
       <form onSubmit={handleAllIncomesSubmit}>
         <TableContainer component={Paper} sx={{ mt: 4 }}>
-          <Table>
+          <Table style={{ minWidth: 600 }}>
             <TableHead>
               <TableRow>
-                <TableCell>Action</TableCell>
-                <TableCell>Label</TableCell>
+                <TableCell>Title</TableCell>
                 <TableCell>Frequency</TableCell>
                 <TableCell>Value</TableCell>
                 <TableCell>Total</TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>{renderIncomes()}</TableBody>
@@ -418,60 +413,49 @@ const IncomePage = () => {
         </Grid>
       </form>
 
-      {isAddSingleIncomeOpen && (
-        <Grid
-          container
-          alignItems="center"
-          justifyContent="center"
-          sx={{ mt: 4 }}
-        >
-          <Grid item>
-            <Paper elevation={3} sx={{ p: 2 }}>
-                  <form onSubmit={handleSingleIncomeSubmit}>
-                <Grid container spacing={2} alignItems="center">
-                  <Grid item>
-                    <TextField
-                      label="Label"
-                      variant="outlined"
-                      value={singleIncomeLabel}
-                      onChange={(e) => setSingleIncomeLabel(e.target.value)}
-                      required
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Select
-                      value={singleIncomeFrequency}
-                      onChange={(e) => setSingleIncomeFrequency(e.target.value)}
-                      variant="outlined"
-                      sx={{ minWidth: 120 }}
-                    >
-                      <MenuItem value="weekly">Weekly</MenuItem>
-                      <MenuItem value="monthly">Monthly</MenuItem>
-                      <MenuItem value="fortnightly">Fortnightly</MenuItem>
-                      <MenuItem value="yearly">Yearly</MenuItem>
-                    </Select>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      type="button"
-                      variant="contained"
-                      onClick={handleCancelAddIncome}
-                      sx={{ bgcolor: "red", color: "white" }}
-                    >
-                      Cancel
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button type="submit" variant="contained" color="primary">
-                      Save
-                    </Button>
-                  </Grid>
+      <Dialog open={isAddSingleIncomeOpen} onClose={handleCancelAddIncome}>
+        <DialogTitle>Add New Income</DialogTitle>
+        <DialogContent>
+          <form onSubmit={handleSingleIncomeSubmit}>
+            <form onSubmit={handleSingleIncomeSubmit}>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12}>
+                  <TextField
+                    label="Label"
+                    variant="outlined"
+                    value={singleIncomeLabel}
+                    onChange={(e) => setSingleIncomeLabel(e.target.value)}
+                    required
+                    fullWidth
+                  />
                 </Grid>
-              </form>
-            </Paper>
-          </Grid>
-        </Grid>
-      )}
+
+                <Grid item>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    onClick={handleCancelAddIncome}
+                    sx={{
+                      bgcolor: "red",
+                      color: "white",
+                      "&:hover": {
+                        bgcolor: "#ff0000", // Red color for hover state
+                      },
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button type="submit" variant="contained" color="primary">
+                    Save
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </form>
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 };
