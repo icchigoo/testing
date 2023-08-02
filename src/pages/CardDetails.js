@@ -14,16 +14,19 @@ import propertyService from "../features/property/propertyService";
 import OverviewPage from "./OverviewPage";
 import Iconify from "../components/iconify";
 import PropertyMenuBar from "../components/menu-property/PropertyMenuBar";
-import General from "../components/menu/General";
+import { AppCurrentVisits } from "../sections/@dashboard/app";
+import { useTheme } from '@mui/material/styles';
 
 const CardDetails = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(0);
+  const theme = useTheme();
 
   useEffect(() => {
     const fetchProductDetails = async () => {
+     
       try {
         const response = await propertyService.getPropertyById(productId);
         if (response) {
@@ -92,7 +95,7 @@ const CardDetails = () => {
           )}
         </Grid>
         <Grid item xs={12} md={4} marginTop={10}>
-          <Card>
+        <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Additional Information
@@ -102,8 +105,28 @@ const CardDetails = () => {
                 varius nisl ut ex aliquam, vel volutpat sapien malesuada.
               </Typography>
             </CardContent>
+
+            <Grid >
+            <AppCurrentVisits
+              title="Current Visits"
+              chartData={[
+                { label: 'America', value: 4344 },
+                { label: 'Asia', value: 5435 },
+                { label: 'Europe', value: 1443 },
+                { label: 'Africa', value: 4443 },
+              ]}
+              chartColors={[
+                theme.palette.primary.main,
+                theme.palette.info.main,
+                theme.palette.warning.main,
+                theme.palette.error.main,
+              ]}
+            />
+          </Grid>
+          
           </Card>
         </Grid>
+        
       </Grid>
     </Container>
   );

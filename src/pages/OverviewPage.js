@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import {
   ExpandMore as ExpandMoreIcon,
-  Home as HomeIcon,
 } from "@mui/icons-material";
 
 const OverviewPage = ({ propertyId, onClose }) => {
@@ -45,46 +44,47 @@ const OverviewPage = ({ propertyId, onClose }) => {
     <Container>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <HomeIcon color="primary" />
           <Typography variant="h6">Property</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Grid container spacing={2}>
-            {/* Property Name */}
             <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1">
-                Property Name: {property.name}
+              <Typography variant="subtitle1" color="textSecondary">
+                Property Name
+              </Typography>
+              <Typography variant="body1">{property.name}</Typography>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography variant="subtitle1" color="textSecondary">
+                Property Address
+              </Typography>
+              <Typography variant="body1">{property.address}</Typography>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography variant="subtitle1" color="textSecondary">
+                Date of Purchase
+              </Typography>
+              <Typography variant="body1">
+                {property.dateofPurchase}
               </Typography>
             </Grid>
-            {/* Property Address */}
             <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1">
-                Property Address: {property.address}
+              <Typography variant="subtitle1" color="textSecondary">
+                Suburb
               </Typography>
+              <Typography variant="body1">{property.suburb}</Typography>
             </Grid>
-            {/* Date of Purchase */}
             <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1">
-                Date of Purchase: {property.dateofPurchase}
+              <Typography variant="subtitle1" color="textSecondary">
+                Post Code
               </Typography>
+              <Typography variant="body1">{property.postCode}</Typography>
             </Grid>
-            {/* Suburb */}
             <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1">
-                Suburb: {property.suburb}
+              <Typography variant="subtitle1" color="textSecondary">
+                State
               </Typography>
-            </Grid>
-            {/* Post Code */}
-            <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1">
-                Post Code: {property.postCode}
-              </Typography>
-            </Grid>
-            {/* State */}
-            <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1">
-                State: {property.state}
-              </Typography>
+              <Typography variant="body1">{property.state}</Typography>
             </Grid>
           </Grid>
         </AccordionDetails>
@@ -96,16 +96,20 @@ const OverviewPage = ({ propertyId, onClose }) => {
         </AccordionSummary>
         <AccordionDetails>
           <Grid container spacing={2}>
-            {/* Purchase Rate */}
             <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1">
-                Purchase Rate: {formatCurrency(property.purchaseRate)}
+              <Typography variant="subtitle1" color="textSecondary">
+                Purchase Rate
+              </Typography>
+              <Typography variant="body1">
+                {formatCurrency(property.purchaseRate)}
               </Typography>
             </Grid>
-            {/* Rental Income */}
             <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1">
-                Rental Income (Weekly): {formatCurrency(property.rentalIncome)}
+              <Typography variant="subtitle1" color="textSecondary">
+                Rental Income (Weekly)
+              </Typography>
+              <Typography variant="body1">
+                {formatCurrency(property.rentalIncome)}
               </Typography>
             </Grid>
           </Grid>
@@ -118,42 +122,52 @@ const OverviewPage = ({ propertyId, onClose }) => {
         </AccordionSummary>
         <AccordionDetails>
           <Grid container spacing={2}>
-            {/* Strata Body Corporate (Quarterly) */}
             <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1">
-                Strata Body Corporate (Quarterly):{" "}
+              <Typography variant="subtitle1" color="textSecondary">
+                Strata Body Corporate (Quarterly)
+              </Typography>
+              <Typography variant="body1">
                 {formatCurrency(property.strataBodyCorporate)}
               </Typography>
             </Grid>
-            {/* Council Rates (Yearly) */}
             <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1">
-                Council Rates (Yearly): {formatCurrency(property.councilRates)}
+              <Typography variant="subtitle1" color="textSecondary">
+                Council Rates (Yearly)
+              </Typography>
+              <Typography variant="body1">
+                {formatCurrency(property.councilRates)}
               </Typography>
             </Grid>
-            {/* Water Rates (Yearly) */}
             <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1">
-                Water Rates (Yearly): {formatCurrency(property.waterRates)}
+              <Typography variant="subtitle1" color="textSecondary">
+                Water Rates (Yearly)
+              </Typography>
+              <Typography variant="body1">
+                {formatCurrency(property.waterRates)}
               </Typography>
             </Grid>
-            {/* Insurance Premium (Yearly) */}
             <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1">
-                Insurance Premium (Yearly):{" "}
+              <Typography variant="subtitle1" color="textSecondary">
+                Insurance Premium (Yearly)
+              </Typography>
+              <Typography variant="body1">
                 {formatCurrency(property.insurancePremium)}
               </Typography>
             </Grid>
-            {/* Management Fee (% of Rent) */}
             <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1">
-                Management Fee (% of Rent): {property.managementFee}%
+              <Typography variant="subtitle1" color="textSecondary">
+                Management Fee (% of Rent)
+              </Typography>
+              <Typography variant="body1">
+                {property.managementFee}%
               </Typography>
             </Grid>
-            {/* Maintenance (% of Rent) */}
             <Grid item xs={12} md={6}>
-              <Typography variant="subtitle1">
-                Maintenance (% of Rent): {property.maintenance}%
+              <Typography variant="subtitle1" color="textSecondary">
+                Maintenance (% of Rent)
+              </Typography>
+              <Typography variant="body1">
+                {property.maintenance}%
               </Typography>
             </Grid>
           </Grid>
