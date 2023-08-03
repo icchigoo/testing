@@ -19,7 +19,11 @@ import {
   IconButton,
   Stack,
   Container,
-  Grid
+  Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 import Iconify from "../components/iconify/Iconify";
@@ -132,6 +136,7 @@ const LoanPage = ({ propertyId, onClose }) => {
     setLoanTerm("");
     setLoanInterestRate("");
     setLoanDate("");
+    setShowAddLoan(false);
   };
 
   const handleLoanDelete = (loanIndex) => {
@@ -178,12 +183,8 @@ const LoanPage = ({ propertyId, onClose }) => {
             <Typography variant="h4" gutterBottom>
               Details
             </Typography>
-            <Button
-              onClick={() => setShowAddLoan(true)}
-              variant="contained"
-              color="primary"
-            >
-              Add 
+            <Button onClick={() => setShowAddLoan(true)} color="primary">
+              <Iconify icon="bi:plus-circle" />{" "}
             </Button>
           </Stack>
           <Typography variant="h6" className="text-right font-bold">
@@ -244,104 +245,86 @@ const LoanPage = ({ propertyId, onClose }) => {
             </TableContainer>
           )}
         </Paper>
-
-        {showAddLoan && (
-         <Paper className="mt-4 p-4">
-         <Typography variant="h6" gutterBottom>
-           Add Loan
-         </Typography>
-         <Grid container spacing={2}>
-           <Grid item xs={12}>
-             <TextField
-               label="Loan Name"
-               value={loanName}
-               onChange={handleLoanNameChange}
-               variant="outlined"
-               fullWidth
-               required
-             />
-           </Grid>
-           <Grid item xs={12} sm={6}>
-             <TextField
-               label="Loan Amount"
-               type="number"
-               value={loanAmount}
-               onChange={handleLoanAmountChange}
-               variant="outlined"
-               fullWidth
-               required
-             />
-           </Grid>
-           <Grid item xs={12} sm={6}>
-             <TextField
-               label="Loan Term"
-               type="number"
-               value={loanTerm}
-               onChange={handleLoanTermChange}
-               variant="outlined"
-               fullWidth
-               required
-             />
-           </Grid>
-           <Grid item xs={12} sm={6}>
-             <TextField
-               label="Interest Rate"
-               type="number"
-               value={loanInterestRate}
-               onChange={handleLoanInterestRateChange}
-               variant="outlined"
-               fullWidth
-               required
-             />
-           </Grid>
-           <Grid item xs={12} sm={6}>
-             <TextField
-               label="Loan Date"
-               type="date"
-               name="loan date"
-               value={loanDate}
-               onChange={handleLoanDateChange}
-               variant="outlined"
-               fullWidth
-               required
-               InputLabelProps={{
-                shrink: true,
-              }}
-             />
-           </Grid>
-           <Grid item xs={12}>
-             <div className="flex justify-end">
-               {editIndex !== null ? (
-                 <>
-                   <Button
-                     variant="outlined"
-                     color="default"
-                     onClick={() => handleCancelEdit()}
-                     className="mr-2"
-                   >
-                     Cancel
-                   </Button>
-                   <Button
-                     variant="contained"
-                     color="primary"
-                     onClick={handleSubmitLoan}
-                   >
-                     Update Loan
-                   </Button>
-                 </>
-               ) : (
-                <Grid item xs={12} style={{ display: "flex", justifyContent: "flex-end" }}>
-                 <Button variant="contained" color="primary" onClick={handleSubmitLoan}>
-                  Add
-                </Button>
+        <Dialog
+          open={showAddLoan}
+          onClose={() => setShowAddLoan(false)}
+          fullWidth
+          maxWidth="sm"
+        >
+          <DialogTitle>
+            {editIndex !== null ? "Edit Loan" : "Add Loan"}
+          </DialogTitle>
+          <DialogContent>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  label="Loan Name"
+                  value={loanName}
+                  onChange={handleLoanNameChange}
+                  variant="outlined"
+                  fullWidth
+                  required
+                />
               </Grid>
-               )}
-             </div>
-           </Grid>
-         </Grid>
-       </Paper>
-       
-        )}
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Loan Amount"
+                  type="number"
+                  value={loanAmount}
+                  onChange={handleLoanAmountChange}
+                  variant="outlined"
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Loan Term"
+                  type="number"
+                  value={loanTerm}
+                  onChange={handleLoanTermChange}
+                  variant="outlined"
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Interest Rate"
+                  type="number"
+                  value={loanInterestRate}
+                  onChange={handleLoanInterestRateChange}
+                  variant="outlined"
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Loan Date"
+                  type="date"
+                  name="loan date"
+                  value={loanDate}
+                  onChange={handleLoanDateChange}
+                  variant="outlined"
+                  fullWidth
+                  required
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setShowAddLoan(false)} color="secondary">
+              Cancel
+            </Button>
+            <Button onClick={handleSubmitLoan} color="primary">
+              {editIndex !== null ? "Update Loan" : "Add Loan"}
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </Card>
   );
