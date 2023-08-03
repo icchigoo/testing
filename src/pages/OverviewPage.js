@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from "react";
 import propertyService from "../features/property/propertyService";
 import LoadingSpinner from "../components/spinner/LoadingSpinner";
-import {
-  Container,
-  Typography,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Grid,
-  Card,
-} from "@mui/material";
-import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
+import { Typography, AccordionDetails, Grid, Card } from "@mui/material";
 
 const OverviewPage = ({ propertyId, onClose }) => {
   const [property, setProperty] = useState(null);

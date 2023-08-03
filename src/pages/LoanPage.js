@@ -25,8 +25,9 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import { Edit } from "@mui/icons-material";
+import { Edit, Delete } from "@mui/icons-material";
 import Iconify from "../components/iconify/Iconify";
+import LoadingSpinner from "../components/spinner/LoadingSpinner";
 
 const LoanPage = ({ propertyId, onClose }) => {
   const dispatch = useDispatch();
@@ -49,9 +50,10 @@ const LoanPage = ({ propertyId, onClose }) => {
         console.error("Error fetching property loans:", error);
       }
     };
-
+  
     fetchPropertyLoans();
   }, [dispatch, propertyId]);
+  
 
   useEffect(() => {
     if (editIndex !== null && property && property.loan) {
@@ -129,6 +131,7 @@ const LoanPage = ({ propertyId, onClose }) => {
     setEditIndex(loanIndex);
     setShowAddLoan(true); // Show the edit section when editing a loan
   };
+
   const handleCancelEdit = () => {
     setEditIndex(null);
     setLoanName("");
@@ -140,29 +143,31 @@ const LoanPage = ({ propertyId, onClose }) => {
   };
 
   const handleLoanDelete = (loanIndex) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this loan?"
-    );
-
+    const confirmDelete = window.confirm("Are you sure you want to delete this loan?");
+  
     if (confirmDelete) {
       const updatedLoans = [...property.loan];
       updatedLoans.splice(loanIndex, 1);
-
+  
       const updatedProperty = {
         ...property,
         loan: updatedLoans,
       };
-
+  
       dispatch(editProperty({ id: propertyId, updatedProperty }))
-        .then(() => {})
+        .then(() => {
+          // Deletion successful, do any additional actions here if needed
+        })
         .catch((error) => {
           console.error("Error deleting loan:", error);
+          // Handle the error, show an error message, or perform any recovery actions
         });
     }
   };
+  
 
   if (!property) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   // Calculate total loan balance
@@ -221,7 +226,9 @@ const LoanPage = ({ propertyId, onClose }) => {
                             <IconButton
                               onClick={() => handleCancelEdit()}
                               className="text-gray-500 hover:text-gray-700 mr-2"
-                            ></IconButton>
+                            >
+                              <Delete />
+                            </IconButton>
                             <IconButton
                               onClick={() => handleLoanDelete(index)}
                               className="text-red-500 hover:text-red-700"

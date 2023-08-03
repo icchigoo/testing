@@ -4,6 +4,30 @@ import {
   getPropertyById,
   editProperty,
 } from "../features/property/propertySlice";
+import {
+  Card,
+  Typography,
+  Button,
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Stack,
+  Container,
+  Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  MenuItem
+} from "@mui/material";
+import { Edit, Delete } from "@mui/icons-material";
+import Iconify from "../components/iconify/Iconify";
 
 const ValuationPage = ({ propertyId, onClose }) => {
   const dispatch = useDispatch();
@@ -163,150 +187,147 @@ const ValuationPage = ({ propertyId, onClose }) => {
   if (!property) {
     return <div>Loading...</div>;
   }
-
   return (
-    <div className="p-4">
-      <div className="bg-white rounded-md shadow-md p-4">
-        <h2 className="text-2xl font-bold mb-4">Current Valuation</h2>
-        <div className="flex justify-end text-xl font-bold">
-          ${totalAmount}
-        </div>
-      </div>
-
-      <div className="bg-white rounded-md shadow-md mt-4 p-4">
-        <h3 className="text-xl font-bold mb-2">Initial Valuation</h3>
-        <p className="mb-4">
-          Edit the initial valuation by updating the purchase price on the
-          information tab.
-        </p>
-        <h3 className="text-xl font-bold mb-2">Valuations:</h3>
-        {property.valuations.length === 0 ? (
-          <p>No valuations added yet.</p>
-        ) : (
-          <table className="w-full border border-gray-300 mt-2">
-            <thead>
-              <tr>
-                <th className="py-2 px-4 border-b">Date</th>
-                <th className="py-2 px-4 border-b">Amount</th>
-                <th className="py-2 px-4 border-b">Type</th>
-                <th className="py-2 px-4 border-b">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {property.valuations.map((valuation, index) => (
-                <tr key={valuation._id}>
-                  <td className="py-2 px-4 border-b">{valuation.date}</td>
-                  <td className="py-2 px-4 border-b">{valuation.amount}</td>
-                  <td className="py-2 px-4 border-b">{valuation.type}</td>
-                  {index !== property.valuations.length - 1 && (
-                    <td className="py-2 px-4 border-b">
-                      <button
-                        onClick={() => handleValuationEdit(valuation._id)}
-                        className="text-blue-500 hover:text-blue-700"
-                      >
-                        Edit
-                      </button>{" "}
-                      |{" "}
-                      <button
-                        onClick={() => handleValuationDelete(valuation._id)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-
-        <div className="flex justify-end mt-4">
-          <button
-            onClick={() => setShowAddValuation(true)}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md"
+    <Card>
+      <Container>
+        <Paper className="p-4">
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            mb={5}
           >
-            Add Valuation
-          </button>
-        </div>
-      </div>
-
-      {showAddValuation && (
-        <div className="bg-white rounded-md shadow-md mt-4 p-4">
-          <h3 className="text-xl font-bold mb-2">
+            <Typography variant="h4" gutterBottom>
+              Valuations
+            </Typography>
+            <Button onClick={() => setShowAddValuation(true)} color="primary">
+              <Iconify icon="bi:plus-circle" />{" "}
+            </Button>
+          </Stack>
+          {/* <Typography variant="h6" className="text-right font-bold">
+            Total Valuation Amount: ${totalValuationAmount.toFixed(2)}
+          </Typography> */}
+          {property.valuations.length === 0 ? (
+            <p>No valuations added yet.</p>
+          ) : (
+            <TableContainer component={Paper} className="mt-2">
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Date</TableCell>
+                    <TableCell>Amount</TableCell>
+                    <TableCell>Type</TableCell>
+                    <TableCell></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {property.valuations.map((valuation, index) => (
+                    <TableRow key={valuation._id}>
+                      <TableCell>{valuation.date}</TableCell>
+                      <TableCell>
+                        ${parseFloat(valuation.amount).toFixed(2)}
+                      </TableCell>
+                      <TableCell>{valuation.type}</TableCell>
+                      <TableCell>
+                        {editingValuationId === valuation._id ? (
+                          <>
+                            <IconButton
+                              onClick={() => handleCancel()}
+                              className="text-gray-500 hover:text-gray-700 mr-2"
+                            >
+                              <Delete />
+                            </IconButton>
+                            <IconButton
+                              onClick={() => handleValuationDelete(valuation._id)}
+                              className="text-red-500 hover:text-red-700"
+                            >
+                              <Edit />
+                            </IconButton>
+                          </>
+                        ) : (
+                          <IconButton
+                            onClick={() => handleValuationEdit(valuation._id)}
+                            className="text-blue-500 hover:text-blue-700"
+                          >
+                            <Edit />
+                          </IconButton>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </Paper>
+        <Dialog
+          open={showAddValuation}
+          onClose={() => setShowAddValuation(false)}
+          fullWidth
+          maxWidth="sm"
+        >
+          <DialogTitle>
             {editingValuationId ? "Edit Valuation" : "Add Valuation"}
-          </h3>
-          <div className="flex mb-4">
-            <div className="mr-4 w-1/3">
-              <label htmlFor="date" className="block text-sm font-medium mb-2">
-                Date
-              </label>
-              <input
-                type="date"
-                id="date"
-                value={date}
-                onChange={handleDateChange}
-                className="border border-gray-300 rounded-md px-3 py-2 w-full"
-                required
-              />
-              {dateError && (
-                <p className="text-red-500 text-sm">{dateError}</p>
-              )}
-            </div>
-            <div className="mr-4 w-1/3">
-              <label
-                htmlFor="amount"
-                className="block text-sm font-medium mb-2"
-              >
-                Amount
-              </label>
-              <input
-                type="number"
-                id="amount"
-                value={amount}
-                onChange={handleAmountChange}
-                className="border border-gray-300 rounded-md px-3 py-2 w-full"
-                required
-              />
-            </div>
-            <div className="w-1/3">
-              <label
-                htmlFor="valuationType"
-                className="block text-sm font-medium mb-2"
-              >
-                Valuation Type
-              </label>
-              <select
-                id="valuationType"
-                value={valuationType}
-                onChange={handleValuationTypeChange}
-                className="border border-gray-300 rounded-md px-3 py-2 w-full"
-                required
-              >
-                <option value="">Select Type</option>
-                <option value="formal">Formal</option>
-                <option value="informal">Informal</option>
-              </select>
-            </div>
-          </div>
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded-md"
-              onClick={handleSubmit}
-            >
-              {editingValuationId ? "Update Valuation" : "Add Valuation"}
-            </button>
-            <button
-              onClick={handleCancel}
-              className="px-4 py-2 bg-gray-500 text-white rounded-md ml-2"
-            >
+          </DialogTitle>
+          <DialogContent>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  label="Date"
+                  type="date"
+                  value={date}
+                  onChange={handleDateChange}
+                  variant="outlined"
+                  fullWidth
+                  required
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                {dateError && (
+                  <Typography variant="caption" color="error">
+                    {dateError}
+                  </Typography>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Amount"
+                  type="number"
+                  value={amount}
+                  onChange={handleAmountChange}
+                  variant="outlined"
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Valuation Type"
+                  select
+                  value={valuationType}
+                  onChange={handleValuationTypeChange}
+                  variant="outlined"
+                  fullWidth
+                  required
+                >
+                  <MenuItem value="formal">Formal</MenuItem>
+                  <MenuItem value="informal">Informal</MenuItem>
+                </TextField>
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setShowAddValuation(false)} color="secondary">
               Cancel
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+            </Button>
+            <Button onClick={handleSubmit} color="primary">
+              {editingValuationId ? "Update Valuation" : "Add Valuation"}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Container>
+    </Card>
   );
 };
 

@@ -37,7 +37,7 @@ export default function Router() {
         { path: 'expenses', element: <ExpensesPage /> },
         { path: 'incomes', element: <IncomePage /> },
         { path: '/dashboard/card-details/:productId', element: <CardDetails /> },
-        { path: '/dashboard/card-details/:id', element: <CardDetails /> },
+
 
       ],
     },

@@ -113,7 +113,7 @@ export const propertySlice = createSlice({
         state.message = action.error;
       })
       .addCase(editProperty.pending, (state) => {
-        state.isLoading = true;
+        state.isLoading = false;
       })
       .addCase(editProperty.fulfilled, (state, action) => {
         state.isLoading = false;
