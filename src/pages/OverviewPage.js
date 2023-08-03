@@ -8,6 +8,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   Grid,
+  Card
 } from "@mui/material";
 import {
   ExpandMore as ExpandMoreIcon,
@@ -41,7 +42,7 @@ const OverviewPage = ({ propertyId, onClose }) => {
   };
 
   return (
-    <Container>
+    <Card>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h6">Property</Typography>
@@ -173,7 +174,7 @@ const OverviewPage = ({ propertyId, onClose }) => {
           </Grid>
         </AccordionDetails>
       </Accordion>
-    </Container>
+      </Card>
   );
 };
 
