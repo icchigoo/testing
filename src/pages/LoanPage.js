@@ -1,5 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  Card,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 
 
 import { getPropertyById, editProperty } from "../features/property/propertySlice";
@@ -146,195 +160,156 @@ const LoanPage = ({ propertyId, onClose }) => {
   }, 0);
 
   return (
-    <div className="p-4">
-      <div className="bg-white rounded-md shadow-md p-4">
-        <h2 className="text-2xl font-bold mb-4">Loan Details</h2>
-        <div className="flex justify-end text-xl font-bold">
+    <Card>
+      <Paper elevation={3} className="p-4">
+        <Typography variant="h5" gutterBottom>
+          Loan Details
+        </Typography>
+        <Typography variant="subtitle1">
           Total Loan Balance: ${totalLoanBalance.toFixed(2)}
-        </div>
+        </Typography>
         {property.loan.length === 0 ? (
-          <p>No loans added yet.</p>
+          <Typography variant="body1">No loans added yet.</Typography>
         ) : (
-          <table className="w-full border border-gray-300 mt-2">
-            <thead>
-              <tr>
-                <th className="py-2 px-4 border-b">Loan Name</th>
-                <th className="py-2 px-4 border-b">Loan Amount</th>
-                <th className="py-2 px-4 border-b">Loan Term</th>
-                <th className="py-2 px-4 border-b">Interest Rate</th>
-                <th className="py-2 px-4 border-b">Date</th>
-                <th className="py-2 px-4 border-b">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {property.loan.map((loan, index) => (
-                <tr key={index}>
-                  <td className="py-2 px-4 border-b">{loan.name}</td>
-                  <td className="py-2 px-4 border-b">
-                    ${parseFloat(loan.loanAmountRemaining).toFixed(2)}
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    {loan.longTermRemaining}
-                  </td>
-                  <td className="py-2 px-4 border-b">{loan.interestRate}%</td>
-                  <td className="py-2 px-4 border-b">{loan.date}</td>
-                  <td className="py-2 px-4 border-b">
-                    {editIndex === index ? (
-                      <>
-                        <button
-                          onClick={() => handleCancelEdit()}
-                          className="text-gray-500 hover:text-gray-700 mr-2"
+          <TableContainer component={Paper} className="mt-2">
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Loan Name</TableCell>
+                  <TableCell>Loan Amount</TableCell>
+                  <TableCell>Loan Term</TableCell>
+                  <TableCell>Interest Rate</TableCell>
+                  <TableCell>Date</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {property.loan.map((loan, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{loan.name}</TableCell>
+                    <TableCell>${parseFloat(loan.loanAmountRemaining).toFixed(2)}</TableCell>
+                    <TableCell>{loan.longTermRemaining}</TableCell>
+                    <TableCell>{loan.interestRate}%</TableCell>
+                    <TableCell>{loan.date}</TableCell>
+                    <TableCell>
+                      {editIndex === index ? (
+                        <>
+                          <Button
+                            onClick={() => handleCancelEdit()}
+                            className="text-gray-500 hover:text-gray-700 mr-2"
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            onClick={() => handleLoanDelete(index)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            Delete
+                          </Button>
+                        </>
+                      ) : (
+                        <Button
+                          onClick={() => handleEditLoan(index)}
+                          className="text-blue-500 hover:text-blue-700"
                         >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={() => handleLoanDelete(index)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          Delete
-                        </button>
-                      </>
-                    ) : (
-                      <button
-                        onClick={() => handleEditLoan(index)}
-                        className="text-blue-500 hover:text-blue-700"
-                      >
-                        Edit
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                          Edit
+                        </Button>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         )}
 
         <div className="flex justify-end mt-4">
-          <button
+          <Button
             onClick={() => setShowAddLoan(true)}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md"
+            variant="contained"
+            color="primary"
           >
             Add Loan
-          </button>
+          </Button>
         </div>
-      </div>
+      </Paper>
 
       {showAddLoan && (
-        <div className="bg-white rounded-md shadow-md mt-4 p-4">
-          <h3 className="text-xl font-bold mb-2">Add Loan</h3>
-          <div className="flex mb-4">
-            <div className="mr-4 w-1/4">
-              <label
-                htmlFor="loanName"
-                className="block text-sm font-medium mb-2"
-              >
-                Loan Name
-              </label>
-              <input
-                type="text"
-                id="loanName"
+        <Paper elevation={3} className="mt-4 p-4">
+          <Typography variant="h6" gutterBottom>
+            Add Loan
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                fullWidth
+                label="Loan Name"
                 value={loanName}
                 onChange={handleLoanNameChange}
-                className="border border-gray-300 rounded-md px-3 py-2 w-full"
                 required
               />
-            </div>
-            <div className="mr-4 w-1/4">
-              <label
-                htmlFor="loanAmount"
-                className="block text-sm font-medium mb-2"
-              >
-                Loan Amount
-              </label>
-              <input
-                type="number"
-                id="loanAmount"
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                fullWidth
+                label="Loan Amount"
                 value={loanAmount}
                 onChange={handleLoanAmountChange}
-                className="border border-gray-300 rounded-md px-3 py-2 w-full"
                 required
               />
-            </div>
-            <div className="mr-4 w-1/4">
-              <label
-                htmlFor="loanTerm"
-                className="block text-sm font-medium mb-2"
-              >
-                Loan Term
-              </label>
-              <input
-                type="number"
-                id="loanTerm"
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                fullWidth
+                label="Loan Term"
                 value={loanTerm}
                 onChange={handleLoanTermChange}
-                className="border border-gray-300 rounded-md px-3 py-2 w-full"
                 required
               />
-            </div>
-            <div className="mr-4 w-1/4">
-              <label
-                htmlFor="loanInterestRate"
-                className="block text-sm font-medium mb-2"
-              >
-                Interest Rate
-              </label>
-              <input
-                type="number"
-                id="loanInterestRate"
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                fullWidth
+                label="Interest Rate"
                 value={loanInterestRate}
                 onChange={handleLoanInterestRateChange}
-                className="border border-gray-300 rounded-md px-3 py-2 w-full"
                 required
               />
-            </div>
-            <div className="mr-4 w-1/4">
-              <label
-                htmlFor="loanDate"
-                className="block text-sm font-medium mb-2"
-              >
-                Loan Date
-              </label>
-              <input
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                fullWidth
+                label="Loan Date"
                 type="date"
-                id="loanDate"
                 value={loanDate}
                 onChange={handleLoanDateChange}
-                className="border border-gray-300 rounded-md px-3 py-2 w-full"
                 required
               />
-            </div>
-          </div>
-          <div className="flex justify-end">
+            </Grid>
+          </Grid>
+          <div className="flex justify-end mt-2">
             {editIndex !== null ? (
               <>
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2"
+                <Button
+                  className="mr-2"
                   onClick={() => handleCancelEdit()}
+                  variant="outlined"
                 >
                   Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                  onClick={handleSubmitLoan}
-                >
+                </Button>
+                <Button onClick={handleSubmitLoan} variant="contained" color="primary">
                   Update Loan
-                </button>
+                </Button>
               </>
             ) : (
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                onClick={handleSubmitLoan}
-              >
+              <Button onClick={handleSubmitLoan} variant="contained" color="primary">
                 Add Loan
-              </button>
+              </Button>
             )}
           </div>
-        </div>
+        </Paper>
       )}
-    </div>
+     </Card>
   );
 };
 
