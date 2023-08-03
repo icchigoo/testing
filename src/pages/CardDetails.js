@@ -16,6 +16,8 @@ import Iconify from "../components/iconify";
 import PropertyMenuBar from "../components/menu-property/PropertyMenuBar";
 import { AppCurrentVisits } from "../sections/@dashboard/app";
 import { useTheme } from '@mui/material/styles';
+import LoanPage from "./LoanPage";
+import ValuationPage from "./ValuationPage";
 
 const CardDetails = () => {
   const { productId } = useParams();
@@ -92,6 +94,12 @@ const CardDetails = () => {
           />
           {selectedTab === 0 && (
             <OverviewPage propertyId={productId} onClose={() => {}} />
+          )}
+           {selectedTab === 2 && (
+            <LoanPage propertyId={productId} onClose={() => {}} />
+          )}
+           {selectedTab === 3 && (
+            <ValuationPage propertyId={productId} onClose={() => {}} />
           )}
         </Grid>
         <Grid item xs={12} md={4} marginTop={10}>
