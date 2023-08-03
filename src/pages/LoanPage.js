@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getPropertyById,
+  editProperty,
+} from "../features/property/propertySlice";
+import {
   Card,
-  Paper,
   Typography,
-  TextField,
   Button,
-  Grid,
+  TextField,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Paper,
+  IconButton,
+  Stack,
+  Container,
+  Grid
 } from "@mui/material";
-
-
-import { getPropertyById, editProperty } from "../features/property/propertySlice";
+import { Edit } from "@mui/icons-material";
+import Iconify from "../components/iconify/Iconify";
 
 const LoanPage = ({ propertyId, onClose }) => {
   const dispatch = useDispatch();
@@ -161,155 +167,183 @@ const LoanPage = ({ propertyId, onClose }) => {
 
   return (
     <Card>
-      <Paper elevation={3} className="p-4">
-        <Typography variant="h5" gutterBottom>
-          Loan Details
-        </Typography>
-        <Typography variant="subtitle1">
-          Total Loan Balance: ${totalLoanBalance.toFixed(2)}
-        </Typography>
-        {property.loan.length === 0 ? (
-          <Typography variant="body1">No loans added yet.</Typography>
-        ) : (
-          <TableContainer component={Paper} className="mt-2">
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Loan Name</TableCell>
-                  <TableCell>Loan Amount</TableCell>
-                  <TableCell>Loan Term</TableCell>
-                  <TableCell>Interest Rate</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {property.loan.map((loan, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{loan.name}</TableCell>
-                    <TableCell>${parseFloat(loan.loanAmountRemaining).toFixed(2)}</TableCell>
-                    <TableCell>{loan.longTermRemaining}</TableCell>
-                    <TableCell>{loan.interestRate}%</TableCell>
-                    <TableCell>{loan.date}</TableCell>
-                    <TableCell>
-                      {editIndex === index ? (
-                        <>
-                          <Button
-                            onClick={() => handleCancelEdit()}
-                            className="text-gray-500 hover:text-gray-700 mr-2"
-                          >
-                            Cancel
-                          </Button>
-                          <Button
-                            onClick={() => handleLoanDelete(index)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            Delete
-                          </Button>
-                        </>
-                      ) : (
-                        <Button
-                          onClick={() => handleEditLoan(index)}
-                          className="text-blue-500 hover:text-blue-700"
-                        >
-                          Edit
-                        </Button>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-
-        <div className="flex justify-end mt-4">
-          <Button
-            onClick={() => setShowAddLoan(true)}
-            variant="contained"
-            color="primary"
+      <Container>
+        <Paper className="p-4">
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            mb={5}
           >
-            Add Loan
-          </Button>
-        </div>
-      </Paper>
-
-      {showAddLoan && (
-        <Paper elevation={3} className="mt-4 p-4">
-          <Typography variant="h6" gutterBottom>
-            Add Loan
+            <Typography variant="h4" gutterBottom>
+              Details
+            </Typography>
+            <Button
+              onClick={() => setShowAddLoan(true)}
+              variant="contained"
+              color="primary"
+            >
+              Add 
+            </Button>
+          </Stack>
+          <Typography variant="h6" className="text-right font-bold">
+            Total Loan Balance: ${totalLoanBalance.toFixed(2)}
           </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                fullWidth
-                label="Loan Name"
-                value={loanName}
-                onChange={handleLoanNameChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                fullWidth
-                label="Loan Amount"
-                value={loanAmount}
-                onChange={handleLoanAmountChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                fullWidth
-                label="Loan Term"
-                value={loanTerm}
-                onChange={handleLoanTermChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                fullWidth
-                label="Interest Rate"
-                value={loanInterestRate}
-                onChange={handleLoanInterestRateChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                fullWidth
-                label="Loan Date"
-                type="date"
-                value={loanDate}
-                onChange={handleLoanDateChange}
-                required
-              />
-            </Grid>
-          </Grid>
-          <div className="flex justify-end mt-2">
-            {editIndex !== null ? (
-              <>
-                <Button
-                  className="mr-2"
-                  onClick={() => handleCancelEdit()}
-                  variant="outlined"
-                >
-                  Cancel
-                </Button>
-                <Button onClick={handleSubmitLoan} variant="contained" color="primary">
-                  Update Loan
-                </Button>
-              </>
-            ) : (
-              <Button onClick={handleSubmitLoan} variant="contained" color="primary">
-                Add Loan
-              </Button>
-            )}
-          </div>
+          {property.loan.length === 0 ? (
+            <p>No loans added yet.</p>
+          ) : (
+            <TableContainer component={Paper} className="mt-2">
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Amount</TableCell>
+                    <TableCell>Term</TableCell>
+                    <TableCell>Rate</TableCell>
+                    <TableCell>Date</TableCell>
+                    <TableCell></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {property.loan.map((loan, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{loan.name}</TableCell>
+                      <TableCell>
+                        ${parseFloat(loan.loanAmountRemaining).toFixed(2)}
+                      </TableCell>
+                      <TableCell>{loan.longTermRemaining}</TableCell>
+                      <TableCell>{loan.interestRate}%</TableCell>
+                      <TableCell>{loan.date}</TableCell>
+                      <TableCell>
+                        {editIndex === index ? (
+                          <>
+                            <IconButton
+                              onClick={() => handleCancelEdit()}
+                              className="text-gray-500 hover:text-gray-700 mr-2"
+                            ></IconButton>
+                            <IconButton
+                              onClick={() => handleLoanDelete(index)}
+                              className="text-red-500 hover:text-red-700"
+                            >
+                              <Edit />
+                            </IconButton>
+                          </>
+                        ) : (
+                          <IconButton
+                            onClick={() => handleEditLoan(index)}
+                            className="text-blue-500 hover:text-blue-700"
+                          >
+                            <Edit />
+                          </IconButton>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
         </Paper>
-      )}
-     </Card>
+
+        {showAddLoan && (
+         <Paper className="mt-4 p-4">
+         <Typography variant="h6" gutterBottom>
+           Add Loan
+         </Typography>
+         <Grid container spacing={2}>
+           <Grid item xs={12}>
+             <TextField
+               label="Loan Name"
+               value={loanName}
+               onChange={handleLoanNameChange}
+               variant="outlined"
+               fullWidth
+               required
+             />
+           </Grid>
+           <Grid item xs={12} sm={6}>
+             <TextField
+               label="Loan Amount"
+               type="number"
+               value={loanAmount}
+               onChange={handleLoanAmountChange}
+               variant="outlined"
+               fullWidth
+               required
+             />
+           </Grid>
+           <Grid item xs={12} sm={6}>
+             <TextField
+               label="Loan Term"
+               type="number"
+               value={loanTerm}
+               onChange={handleLoanTermChange}
+               variant="outlined"
+               fullWidth
+               required
+             />
+           </Grid>
+           <Grid item xs={12} sm={6}>
+             <TextField
+               label="Interest Rate"
+               type="number"
+               value={loanInterestRate}
+               onChange={handleLoanInterestRateChange}
+               variant="outlined"
+               fullWidth
+               required
+             />
+           </Grid>
+           <Grid item xs={12} sm={6}>
+             <TextField
+               label="Loan Date"
+               type="date"
+               name="loan date"
+               value={loanDate}
+               onChange={handleLoanDateChange}
+               variant="outlined"
+               fullWidth
+               required
+               InputLabelProps={{
+                shrink: true,
+              }}
+             />
+           </Grid>
+           <Grid item xs={12}>
+             <div className="flex justify-end">
+               {editIndex !== null ? (
+                 <>
+                   <Button
+                     variant="outlined"
+                     color="default"
+                     onClick={() => handleCancelEdit()}
+                     className="mr-2"
+                   >
+                     Cancel
+                   </Button>
+                   <Button
+                     variant="contained"
+                     color="primary"
+                     onClick={handleSubmitLoan}
+                   >
+                     Update Loan
+                   </Button>
+                 </>
+               ) : (
+                <Grid item xs={12} style={{ display: "flex", justifyContent: "flex-end" }}>
+                 <Button variant="contained" color="primary" onClick={handleSubmitLoan}>
+                  Add
+                </Button>
+              </Grid>
+               )}
+             </div>
+           </Grid>
+         </Grid>
+       </Paper>
+       
+        )}
+      </Container>
+    </Card>
   );
 };
 
