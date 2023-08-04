@@ -50,10 +50,9 @@ const LoanPage = ({ propertyId, onClose }) => {
         console.error("Error fetching property loans:", error);
       }
     };
-  
+
     fetchPropertyLoans();
   }, [dispatch, propertyId]);
-  
 
   useEffect(() => {
     if (editIndex !== null && property && property.loan) {
@@ -142,18 +141,31 @@ const LoanPage = ({ propertyId, onClose }) => {
     setShowAddLoan(false);
   };
 
+  useEffect(() => {
+    if (!showAddLoan) {
+      setEditIndex(null);
+      setLoanName("");
+      setLoanAmount("");
+      setLoanTerm("");
+      setLoanInterestRate("");
+      setLoanDate("");
+    }
+  }, [showAddLoan]);
+
   const handleLoanDelete = (loanIndex) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this loan?");
-  
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this loan?"
+    );
+
     if (confirmDelete) {
       const updatedLoans = [...property.loan];
       updatedLoans.splice(loanIndex, 1);
-  
+
       const updatedProperty = {
         ...property,
         loan: updatedLoans,
       };
-  
+
       dispatch(editProperty({ id: propertyId, updatedProperty }))
         .then(() => {
           // Deletion successful, do any additional actions here if needed
@@ -164,7 +176,6 @@ const LoanPage = ({ propertyId, onClose }) => {
         });
     }
   };
-  
 
   if (!property) {
     return <LoadingSpinner />;
@@ -221,29 +232,18 @@ const LoanPage = ({ propertyId, onClose }) => {
                       <TableCell>{loan.interestRate}%</TableCell>
                       <TableCell>{loan.date}</TableCell>
                       <TableCell>
-                        {editIndex === index ? (
-                          <>
-                            <IconButton
-                              onClick={() => handleCancelEdit()}
-                              className="text-gray-500 hover:text-gray-700 mr-2"
-                            >
-                              <Delete />
-                            </IconButton>
-                            <IconButton
-                              onClick={() => handleLoanDelete(index)}
-                              className="text-red-500 hover:text-red-700"
-                            >
-                              <Edit />
-                            </IconButton>
-                          </>
-                        ) : (
-                          <IconButton
-                            onClick={() => handleEditLoan(index)}
-                            className="text-blue-500 hover:text-blue-700"
-                          >
-                            <Edit />
-                          </IconButton>
-                        )}
+                        <IconButton
+                          onClick={() => handleLoanDelete(index)}
+                          className="text-blue-500 hover:text-blue-700"
+                        >
+                          <Delete />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleEditLoan(index)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                           <Edit />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   ))}
