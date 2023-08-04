@@ -18,6 +18,7 @@ import { AppCurrentVisits } from "../sections/@dashboard/app";
 import { useTheme } from '@mui/material/styles';
 import LoanPage from "./LoanPage";
 import ValuationPage from "./ValuationPage";
+import AddTransaction from "./Addtransaction";
 
 const CardDetails = () => {
   const { productId } = useParams();
@@ -94,6 +95,9 @@ const CardDetails = () => {
           />
           {selectedTab === 0 && (
             <OverviewPage propertyId={productId} onClose={() => {}} />
+          )}
+           {selectedTab === 1 && (
+            <AddTransaction propertyId={productId} onClose={() => {}} />
           )}
            {selectedTab === 2 && (
             <LoanPage propertyId={productId} onClose={() => {}} />
