@@ -24,7 +24,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  MenuItem
+  MenuItem,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import Iconify from "../components/iconify/Iconify";
@@ -40,7 +40,8 @@ const ValuationPage = ({ propertyId, onClose }) => {
   const [dateError, setDateError] = useState("");
   const [totalAmount, setTotalAmount] = useState(0);
   const [showAddValuation, setShowAddValuation] = useState(false);
-  const [editingValuationId, setEditingValuationId] = useState(null);
+  const [editingValuation, setEditingValuation] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
     const fetchPropertyValuations = async () => {
@@ -56,13 +57,15 @@ const ValuationPage = ({ propertyId, onClose }) => {
 
   useEffect(() => {
     if (property && property.valuations) {
-      const amounts = property.valuations.map(
-        (valuation) => Number(valuation.amount)
+      const amounts = property.valuations.map((valuation) =>
+        Number(valuation.amount)
       );
       const sum = amounts.reduce((acc, val) => acc + val, 0);
       setTotalAmount(sum);
     }
   }, [property]);
+
+
 
   const handleDateChange = (e) => {
     setDate(e.target.value);
@@ -97,10 +100,10 @@ const ValuationPage = ({ propertyId, onClose }) => {
       type: valuationType,
     };
 
-    if (editingValuationId) {
+    if (editingValuation) {
       // Editing an existing valuation
       const updatedValuations = property.valuations.map((valuation) => {
-        if (valuation._id === editingValuationId) {
+        if (valuation._id === editingValuation._id) {
           return {
             ...valuation,
             date: date,
@@ -121,7 +124,7 @@ const ValuationPage = ({ propertyId, onClose }) => {
           setDate("");
           setAmount("");
           setValuationType("");
-          setEditingValuationId(null);
+          setEditingValuation(null);
           setShowAddValuation(false);
         })
         .catch((error) => {
@@ -172,7 +175,8 @@ const ValuationPage = ({ propertyId, onClose }) => {
     setDate(valuationToEdit.date);
     setAmount(valuationToEdit.amount);
     setValuationType(valuationToEdit.type);
-    setEditingValuationId(valuationId);
+    setEditingValuation(valuationToEdit); // Set the editing valuation data
+    setIsEditMode(true); // Set the dialog mode to edit
     setShowAddValuation(true);
   };
 
@@ -180,7 +184,8 @@ const ValuationPage = ({ propertyId, onClose }) => {
     setDate("");
     setAmount("");
     setValuationType("");
-    setEditingValuationId(null);
+    setEditingValuation(null); // Reset the editing valuation data
+    setIsEditMode(false); // Reset the dialog mode to add
     setShowAddValuation(false);
   };
 
@@ -204,9 +209,9 @@ const ValuationPage = ({ propertyId, onClose }) => {
               <Iconify icon="bi:plus-circle" />{" "}
             </Button>
           </Stack>
-          {/* <Typography variant="h6" className="text-right font-bold">
-            Total Valuation Amount: ${totalValuationAmount.toFixed(2)}
-          </Typography> */}
+          <Typography variant="h6" className="text-right font-bold">
+            Total Valuation Amount: ${totalAmount.toFixed(2)}
+          </Typography>
           {property.valuations.length === 0 ? (
             <p>No valuations added yet.</p>
           ) : (
@@ -229,29 +234,18 @@ const ValuationPage = ({ propertyId, onClose }) => {
                       </TableCell>
                       <TableCell>{valuation.type}</TableCell>
                       <TableCell>
-                        {editingValuationId === valuation._id ? (
-                          <>
-                            <IconButton
-                              onClick={() => handleCancel()}
-                              className="text-gray-500 hover:text-gray-700 mr-2"
-                            >
-                              <Delete />
-                            </IconButton>
-                            <IconButton
-                              onClick={() => handleValuationDelete(valuation._id)}
-                              className="text-red-500 hover:text-red-700"
-                            >
-                              <Edit />
-                            </IconButton>
-                          </>
-                        ) : (
-                          <IconButton
-                            onClick={() => handleValuationEdit(valuation._id)}
-                            className="text-blue-500 hover:text-blue-700"
-                          >
-                            <Edit />
-                          </IconButton>
-                        )}
+                        <IconButton
+                          onClick={() => handleValuationEdit(valuation._id)}
+                          className="text-blue-500 hover:text-blue-700"
+                        >
+                          <Edit />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleValuationDelete(valuation._id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <Delete />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -262,13 +256,14 @@ const ValuationPage = ({ propertyId, onClose }) => {
         </Paper>
         <Dialog
           open={showAddValuation}
-          onClose={() => setShowAddValuation(false)}
+          onClose={handleCancel}
           fullWidth
           maxWidth="sm"
         >
           <DialogTitle>
-            {editingValuationId ? "Edit Valuation" : "Add Valuation"}
+            {isEditMode ? "Edit Valuation" : "Add Valuation"}
           </DialogTitle>
+
           <DialogContent>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -318,11 +313,11 @@ const ValuationPage = ({ propertyId, onClose }) => {
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setShowAddValuation(false)} color="secondary">
+            <Button onClick={handleCancel} color="secondary">
               Cancel
             </Button>
             <Button onClick={handleSubmit} color="primary">
-              {editingValuationId ? "Update Valuation" : "Add Valuation"}
+              {editingValuation ? "Update Valuation" : "Add Valuation"}
             </Button>
           </DialogActions>
         </Dialog>
