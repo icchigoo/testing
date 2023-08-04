@@ -80,12 +80,12 @@ const CardDetails = () => {
         </Button>
       </Stack>
       <Stack direction="row" spacing={2}>
-        <Typography variant="subtitle1">
+        <Typography variant="subtitle1" color = "primary" >
           {product.address}, {product.state}
         </Typography>
-        <Typography variant="subtitle2" color="primary">
+        {/* <Typography variant="subtitle2" color="primary">
           Purchase Rate ${product.purchaseRate}
-        </Typography>
+        </Typography> */}
       </Stack>
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>

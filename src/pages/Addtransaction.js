@@ -171,7 +171,18 @@ const AddTransaction = ({ propertyId }) => {
                           <MenuItem value="">Select type</MenuItem>
                           <MenuItem value="rental">Rental</MenuItem>
                           <MenuItem value="capital">Capital</MenuItem>
-                          {/* Add other options here */}
+                          <MenuItem value="council">Council</MenuItem>
+                          <MenuItem value="depreciationAndAmortisation">
+                            Depreciation and Amortisation
+                          </MenuItem>
+                          <MenuItem value="insurance">Insurance</MenuItem>
+                          <MenuItem value="maintenance">Maintenance</MenuItem>
+                          <MenuItem value="managementFees">Management Fees</MenuItem>
+                          <MenuItem value="otherExpenses">Other Expenses</MenuItem>
+                          <MenuItem value="strataBodyCorporate">
+                            Strata Body Corporate
+                          </MenuItem>
+                          <MenuItem value="waterRate">Water Rate</MenuItem>
                         </Select>
                       </Grid>
                       <Grid item xs={12} md={6}>
