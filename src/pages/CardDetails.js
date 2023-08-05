@@ -20,6 +20,7 @@ import LoanPage from "./LoanPage";
 import ValuationPage from "./ValuationPage";
 import AddTransaction from "./Addtransaction";
 import EditPropertyPage from "./EditPropertyPage";
+import { Link } from "react-router-dom";
 
 const CardDetails = () => {
   const { productId } = useParams();
@@ -65,22 +66,29 @@ const CardDetails = () => {
       </Container>
     );
   }
+  
 
   return (
     <Container>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4" gutterBottom>
           Details
         </Typography>
-        <Button variant="contained" startIcon={<Iconify icon="eva:edit-fill" />} onClick={handleEditButtonClick}>
-          Edit
-        </Button>
+        {isEditing ? (
+            <Button component={Link} to="/dashboard/products" variant="contained">
+            Property
+          </Button>
+        ) : (
+          <Button variant="contained" startIcon={<Iconify icon="eva:edit-fill" />} onClick={handleEditButtonClick}>
+            Edit
+          </Button>
+        )}
       </Stack>
-
       {/* Conditional rendering */}
       {isEditing ? (
         // Render EditPropertyPage when in edit mode
         <EditPropertyPage property={product} propertyId={productId} onCancel={() => setIsEditing(false)} />
+
       ) : (
         // Render property details when not in edit mode
         <>
