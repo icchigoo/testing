@@ -5,7 +5,6 @@ import {
   saveHouseHoldExpenses,
 } from "../features/expenses/expensesSlice";
 import { DEFAULT_HOUSE_HOLD_EXPENSES } from "../assets/incomeAndExpenses";
-import { AiFillCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 import {
   Typography,
   Container,
@@ -28,7 +27,7 @@ import {
 
 import Iconify from "../components/iconify";
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { CircularProgress } from "@mui/material";
+
 
 const ExpensesPage = () => {
   const dispatch = useDispatch();

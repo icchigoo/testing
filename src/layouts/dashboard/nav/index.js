@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import React, {  useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
-import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
-// mock
-import account from '../../../_mock/account';
+import { Box, Link, Drawer, Typography, Avatar,  } from '@mui/material';
+
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
 // components
@@ -84,7 +83,7 @@ export default function Nav({ openNav, onCloseNav }) {
               </Typography>
 
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {account.role}
+              
               </Typography>
             </Box>
           </StyledAccount>

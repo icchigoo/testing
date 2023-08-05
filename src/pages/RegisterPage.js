@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { styled } from "@mui/material/styles";
-import { Link, Container, Typography, Divider, Stack, Button, TextField, Checkbox } from "@mui/material";
+import { Link, Container, Typography, Stack, Button, TextField, Checkbox } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { createUser } from "../features/auth/authSlice";
 import Logo from "../components/logo";

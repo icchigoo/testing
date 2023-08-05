@@ -22,7 +22,7 @@ const DeleteCard = styled("div")(({ theme }) => ({
   padding: theme.spacing(4),
   borderRadius: theme.shape.borderRadius,
   boxShadow: theme.customShadows.card,
-  backgroundColor: theme.palette.background.default, // Set the background color to match the main background
+  backgroundColor: theme.palette.background.paper,
   textAlign: "center",
   maxWidth: 500,
   maxHeight: 700,
