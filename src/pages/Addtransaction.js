@@ -16,6 +16,7 @@ import {
   Card,
 } from "@mui/material";
 import { Add, Cancel } from "@mui/icons-material";
+import TransactionTable from "../components/transaction/TransactionTable";
 
 const AddTransaction = ({ propertyId }) => {
   const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
@@ -219,6 +220,9 @@ const AddTransaction = ({ propertyId }) => {
             </DialogContent>
           </Dialog>
         </Card>
+        <Grid item xs={12}>
+        <TransactionTable propertyId={propertyId} />
+      </Grid>
       </Grid>
     </Grid>
   );

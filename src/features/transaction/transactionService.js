@@ -13,5 +13,16 @@ const createTransaction = async (propertyId, transactionData) => {
   }
 };
 
+// Function to get transactions for a specific property
+const getTransactionsForProperty = async (propertyId) => {
+  try {
+    const response = await axios.get(`${base_url}transaction/property/${propertyId}`, config);
+    return response.data;
+  } catch (error) {
+    console.error("Error getting transactions for property:", error);
+    throw error;
+  }
+};
+
 // Export your transaction service functions
-export { createTransaction };
+export { createTransaction, getTransactionsForProperty };
