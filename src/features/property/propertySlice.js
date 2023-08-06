@@ -14,16 +14,22 @@ export const getProperty = createAsyncThunk(
 );
 
 // Async thunk to get a property by ID
+// Inside getPropertyById async thunk
 export const getPropertyById = createAsyncThunk(
   "property/getPropertyById",
   async (id, thunkAPI) => {
     try {
-      return await propertyService.getPropertyById(id);
+      console.log("Fetching property by ID:", id);
+      const response = await propertyService.getPropertyById(id);
+      console.log("Fetched property:", response);
+      return response;
     } catch (error) {
+      console.error("Error fetching property by ID:", error);
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
+
 
 // Async thunk to create a property
 export const createProperty = createAsyncThunk(
@@ -86,12 +92,14 @@ export const propertySlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getPropertyById.fulfilled, (state, action) => {
+        console.log("getPropertyById.fulfilled - Action payload:", action.payload);
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.selectedProperty = action.payload; // Add the fetched property to the properties array
+        state.selectedProperty = action.payload;
       })
       .addCase(getPropertyById.rejected, (state, action) => {
+        console.error("getPropertyById.rejected - Error:", action.error);
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
