@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { createTransaction, getTransactionsForProperty } from "../transaction/transactionService";
+import { createTransaction, getTransactionsForProperty, updateTransaction } from "../transaction/transactionService";
 
 // Async thunk to create a transaction
 export const createNewTransaction = createAsyncThunk(
@@ -19,6 +19,17 @@ export const fetchTransactionsForProperty = createAsyncThunk(
   async (propertyId) => {
     try {
       return await getTransactionsForProperty(propertyId);
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const updateExistingTransaction = createAsyncThunk(
+  "transaction/updateExistingTransaction",
+  async ({ transactionId, updatedTransactionData }) => {
+    try {
+      return await updateTransaction(transactionId, updatedTransactionData);
     } catch (error) {
       throw error;
     }
@@ -61,7 +72,19 @@ const transactionSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action.error.message;
-      });
+      })
+        .addCase(updateExistingTransaction.pending, (state) => {
+          state.isLoading = true;
+        })
+        .addCase(updateExistingTransaction.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.transaction = action.payload; // Update the transaction in state
+        })
+        .addCase(updateExistingTransaction.rejected, (state, action) => {
+          state.isLoading = false;
+          state.isError = true;
+          state.errorMessage = action.error.message;
+        });
   },
 });
 

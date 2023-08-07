@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch,  } from "react-redux";
 import {
-  getPropertyById,
-  editProperty,
+    editProperty,
 } from "../features/property/propertySlice";
+import propertyService from "../features/property/propertyService";
 import {
   Card,
   Typography,
@@ -31,9 +31,7 @@ import Iconify from "../components/iconify/Iconify";
 
 const ValuationPage = ({ propertyId, onClose }) => {
   const dispatch = useDispatch();
-  const property = useSelector((state) =>
-    state.property.properties.find((p) => p._id === propertyId)
-  );
+  const [property, setProperty] = useState(null);
   const [date, setDate] = useState("");
   const [amount, setAmount] = useState("");
   const [valuationType, setValuationType] = useState("");
@@ -44,16 +42,17 @@ const ValuationPage = ({ propertyId, onClose }) => {
   const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
-    const fetchPropertyValuations = async () => {
+    const fetchPropertyLoans = async () => {
       try {
-        await dispatch(getPropertyById(propertyId));
+        const response = await propertyService.getPropertyById(propertyId);
+        setProperty(response);
       } catch (error) {
-        console.error("Error fetching property valuations:", error);
+        console.error("Error fetching property loans:", error);
       }
     };
 
-    fetchPropertyValuations();
-  }, [dispatch, propertyId]);
+    fetchPropertyLoans();
+  }, [propertyId]);
 
   useEffect(() => {
     if (property && property.valuations) {

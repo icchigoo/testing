@@ -73,21 +73,22 @@ export const propertySlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getProperty.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getProperty.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.isSuccess = true;
-        state.properties = action.payload;
-      })
-      .addCase(getProperty.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error;
-      })
+    .addCase(getProperty.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(getProperty.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.isSuccess = true;
+      state.properties = action.payload;
+    })
+    .addCase(getProperty.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.isSuccess = false;
+      state.message = action.error;
+    })
+    
       .addCase(getPropertyById.pending, (state) => {
         state.isLoading = true;
       })

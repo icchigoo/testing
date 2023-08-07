@@ -11,7 +11,7 @@ import {
   InputAdornment,
   Alert,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
+
 
 const EditPropertyPage = ({ property, propertyId, onCancel }) => {
   const dispatch = useDispatch();

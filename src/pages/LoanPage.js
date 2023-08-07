@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getPropertyById,
   editProperty,
 } from "../features/property/propertySlice";
+import propertyService from "../features/property/propertyService";
 import {
   Card,
   Typography,
@@ -31,9 +31,7 @@ import LoadingSpinner from "../components/spinner/LoadingSpinner";
 
 const LoanPage = ({ propertyId, onClose }) => {
   const dispatch = useDispatch();
-  const property = useSelector((state) =>
-    state.property.properties.find((p) => p._id === propertyId)
-  );
+  const [property, setProperty] = useState(null);
   const [loanName, setLoanName] = useState("");
   const [loanAmount, setLoanAmount] = useState("");
   const [loanTerm, setLoanTerm] = useState("");
@@ -45,14 +43,15 @@ const LoanPage = ({ propertyId, onClose }) => {
   useEffect(() => {
     const fetchPropertyLoans = async () => {
       try {
-        await dispatch(getPropertyById(propertyId));
+        const response = await propertyService.getPropertyById(propertyId);
+        setProperty(response);
       } catch (error) {
         console.error("Error fetching property loans:", error);
       }
     };
 
     fetchPropertyLoans();
-  }, [dispatch, propertyId]);
+  }, [propertyId]);
 
   useEffect(() => {
     if (editIndex !== null && property && property.loan) {
