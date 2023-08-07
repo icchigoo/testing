@@ -25,7 +25,8 @@ const AddTransaction = ({ propertyId }) => {
       date: "",
       amount: 0,
       comment: "",
-      type: "",
+      income: "",    // Added income field
+      expenses: "",  // Added expenses field
     },
   ]);
 
@@ -36,7 +37,8 @@ const AddTransaction = ({ propertyId }) => {
         date: "",
         amount: 0,
         comment: "",
-        type: "",
+        income: "",    // Added income field
+        expenses: "",  // Added expenses field
       },
     ]);
   };
@@ -73,7 +75,8 @@ const AddTransaction = ({ propertyId }) => {
           date: "",
           amount: 0,
           comment: "",
-          type: "",
+          income: "",    // Added income field
+          expenses: "",  // Added expenses field
         },
       ]);
       setIsTransactionFormOpen(false);
@@ -161,21 +164,37 @@ const AddTransaction = ({ propertyId }) => {
                       </Grid>
                       <Grid item xs={12} md={6}>
                         <Select
-                          value={transaction.type}
+                          value={transaction.income}
                           onChange={(event) =>
                             handleTransactionInputChange(event, index)
                           }
                           variant="outlined"
                           fullWidth
-                          name="type"
+                          name="income"
                         >
-                          <MenuItem value="">Select type</MenuItem>
+                          <MenuItem value="">Select income type</MenuItem>
                           <MenuItem value="rental">Rental</MenuItem>
                           <MenuItem value="capital">Capital</MenuItem>
-                          <MenuItem value="council">Council</MenuItem>
                           <MenuItem value="depreciationAndAmortisation">
                             Depreciation and Amortisation
                           </MenuItem>
+                          <MenuItem value="custom">Custom</MenuItem>
+                        </Select>
+                      </Grid>
+                      
+                      
+                      <Grid item xs={12} md={6}>
+                        <Select
+                          value={transaction.expenses}
+                          onChange={(event) =>
+                            handleTransactionInputChange(event, index)
+                          }
+                          variant="outlined"
+                          fullWidth
+                          name="expenses"
+                        >
+                          <MenuItem value="">Select expenses type</MenuItem>
+                          <MenuItem value="council">Council</MenuItem>
                           <MenuItem value="insurance">Insurance</MenuItem>
                           <MenuItem value="maintenance">Maintenance</MenuItem>
                           <MenuItem value="managementFees">Management Fees</MenuItem>

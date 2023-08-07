@@ -22,7 +22,6 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
-
 const TransactionTable = ({ propertyId }) => {
   const dispatch = useDispatch();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -31,7 +30,8 @@ const TransactionTable = ({ propertyId }) => {
     date: "",
     amount: 0,
     comment: "",
-    type: "",
+    income: "",    // Added income field
+    expenses: "",  // Added expenses field
   });
 
   useEffect(() => {
@@ -40,31 +40,41 @@ const TransactionTable = ({ propertyId }) => {
 
   const transactions = useSelector((state) => state.transaction.transactionsForProperty);
 
-  const handleEditClick = () => {
-    // Open the edit dialog
+  const handleEditClick = (transaction) => {
+    setEditedTransaction(transaction);
+    setEditedTransactionData({
+      date: transaction.date,
+      amount: transaction.amount,
+      comment: transaction.comment,
+      income: transaction.income,
+      expenses: transaction.expenses,
+    });
     setIsEditDialogOpen(true);
   };
+
   const handleEditSubmit = async () => {
     try {
       await dispatch(updateExistingTransaction({
-        propertyId, // Use the correct property ID
+        propertyId,
         updatedPropertyData: editedTransactionData,
+        transactionId: editedTransaction._id,
       }));
 
       setIsEditDialogOpen(false);
+      setEditedTransaction(null);
       setEditedTransactionData({
         date: "",
         amount: 0,
         comment: "",
-        type: "",
+        income: "",
+        expenses: "",
       });
     } catch (error) {
-      console.error("Error updating property:", error);
+      console.error("Error updating transaction:", error);
       // Handle error
     }
   };
-  
-  
+
   if (!transactions) {
     return <Typography variant="subtitle1">Loading...</Typography>;
   }
@@ -81,7 +91,8 @@ const TransactionTable = ({ propertyId }) => {
             <TableCell>Date</TableCell>
             <TableCell>Amount</TableCell>
             <TableCell>Comment</TableCell>
-            <TableCell>Type</TableCell>
+            <TableCell>Income</TableCell>
+            <TableCell>Expenses</TableCell>
             <TableCell>Edit</TableCell>
           </TableRow>
         </TableHead>
@@ -92,7 +103,8 @@ const TransactionTable = ({ propertyId }) => {
                 <TableCell>{transaction.date}</TableCell>
                 <TableCell>{transaction.amount}</TableCell>
                 <TableCell>{transaction.comment}</TableCell>
-                <TableCell>{transaction.type}</TableCell>
+                <TableCell>{transaction.income}</TableCell>
+                <TableCell>{transaction.expenses}</TableCell>
                 <TableCell>
                   <IconButton
                     color="primary"
