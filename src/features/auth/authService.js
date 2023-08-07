@@ -18,7 +18,7 @@ const login = async (user) => {
 const getUserById = async (id) => {
   try {
     const response = await axios.get(`${base_url}user/${id}`, config);
-    console.log("User data:", response.data);
+
     return response.data;
   } catch (error) {
     console.error("Error fetching user by ID:", error);
@@ -28,7 +28,11 @@ const getUserById = async (id) => {
 
 const updatePassword = async (newPassword) => {
   try {
-    const response = await axios.put(`${base_url}user/password`, { password: newPassword }, config);
+    const response = await axios.put(
+      `${base_url}user/password`,
+      { password: newPassword },
+      config
+    );
     return response.data; // Return the relevant response data
   } catch (error) {
     console.error("Error updating password:", error);
@@ -38,7 +42,11 @@ const updatePassword = async (newPassword) => {
 
 const updateUser = async (userData) => {
   try {
-    const response = await axios.put(`${base_url}user/edit-user/`, userData, config);
+    const response = await axios.put(
+      `${base_url}user/edit-user/`,
+      userData,
+      config
+    );
     return response.data;
   } catch (error) {
     console.error("Error updating user:", error);

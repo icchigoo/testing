@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  editProperty,
-} from "../features/property/propertySlice";
+import { editProperty } from "../features/property/propertySlice";
 import propertyService from "../features/property/propertyService";
 import {
   Card,
@@ -25,8 +23,7 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material";
-import Iconify from "../components/iconify/Iconify";
+import { Edit, Delete, Add } from "@mui/icons-material";
 import LoadingSpinner from "../components/spinner/LoadingSpinner";
 
 const LoanPage = ({ propertyId, onClose }) => {
@@ -186,25 +183,23 @@ const LoanPage = ({ propertyId, onClose }) => {
   }, 0);
 
   return (
-    <Card>
-      <Container>
+    <Grid>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Typography variant="h6" gutterBottom>
+          Loan
+        </Typography>
+        <IconButton onClick={() => setShowAddLoan(true)} color="primary">
+          <Add />
+        </IconButton>
+      </Stack>
+      <Card>
         <Paper className="p-4">
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-            mb={5}
-          >
-            <Typography variant="h4" gutterBottom>
-              Details
+          <Paper elevation={3} style={{ padding: "12px", textAlign: "right" }}>
+            <Typography variant="body1" color="textSecondary">
+              Total Loan Balance: ${totalLoanBalance.toFixed(2)}
             </Typography>
-            <Button onClick={() => setShowAddLoan(true)} color="primary">
-              <Iconify icon="bi:plus-circle" />{" "}
-            </Button>
-          </Stack>
-          <Typography variant="h6" className="text-right font-bold">
-            Total Loan Balance: ${totalLoanBalance.toFixed(2)}
-          </Typography>
+          </Paper>
+
           {property.loan.length === 0 ? (
             <p>No loans added yet.</p>
           ) : (
@@ -241,7 +236,7 @@ const LoanPage = ({ propertyId, onClose }) => {
                           onClick={() => handleEditLoan(index)}
                           className="text-red-500 hover:text-red-700"
                         >
-                           <Edit />
+                          <Edit />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -260,6 +255,7 @@ const LoanPage = ({ propertyId, onClose }) => {
           <DialogTitle>
             {editIndex !== null ? "Edit Loan" : "Add Loan"}
           </DialogTitle>
+          <Grid>
           <DialogContent>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -320,19 +316,34 @@ const LoanPage = ({ propertyId, onClose }) => {
                   }}
                 />
               </Grid>
+              <Grid item xs={6}>
+                {/* Cancel Button */}
+                <Button
+                  onClick={() => setShowAddLoan(false)}
+                  color="secondary"
+                  fullWidth
+                >
+                  Cancel
+                </Button>
+              </Grid>
+              <Grid item xs={6}>
+                {/* Add Loan Button */}
+                <Button
+                  onClick={handleSubmitLoan}
+                  color="primary"
+                  variant="contained"
+                  fullWidth
+                >
+                  {editIndex !== null ? "Update Loan" : "Add Loan"}
+                </Button>
+              </Grid>
             </Grid>
+            
           </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setShowAddLoan(false)} color="secondary">
-              Cancel
-            </Button>
-            <Button onClick={handleSubmitLoan} color="primary">
-              {editIndex !== null ? "Update Loan" : "Add Loan"}
-            </Button>
-          </DialogActions>
+          </Grid>
         </Dialog>
-      </Container>
-    </Card>
+      </Card>
+    </Grid>
   );
 };
 

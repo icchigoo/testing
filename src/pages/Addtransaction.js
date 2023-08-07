@@ -94,7 +94,7 @@ const AddTransaction = ({ propertyId }) => {
           justifyContent="space-between"
         >
           <Typography variant="h6" gutterBottom>
-            Create Transaction
+             Transaction
           </Typography>
           <IconButton
             color="primary"

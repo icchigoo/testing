@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch,  } from "react-redux";
-import {
-    editProperty,
-} from "../features/property/propertySlice";
+import { useDispatch } from "react-redux";
+import { editProperty } from "../features/property/propertySlice";
 import propertyService from "../features/property/propertyService";
 import {
   Card,
@@ -26,7 +24,7 @@ import {
   DialogActions,
   MenuItem,
 } from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material";
+import { Edit, Delete, Add } from "@mui/icons-material";
 import Iconify from "../components/iconify/Iconify";
 
 const ValuationPage = ({ propertyId, onClose }) => {
@@ -63,8 +61,6 @@ const ValuationPage = ({ propertyId, onClose }) => {
       setTotalAmount(sum);
     }
   }, [property]);
-
-
 
   const handleDateChange = (e) => {
     setDate(e.target.value);
@@ -192,25 +188,22 @@ const ValuationPage = ({ propertyId, onClose }) => {
     return <div>Loading...</div>;
   }
   return (
-    <Card>
-      <Container>
+    <Grid>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Typography variant="h6" gutterBottom>
+          Valuations
+        </Typography>
+        <IconButton onClick={() => setShowAddValuation(true)} color="primary">
+          <Add />
+        </IconButton>
+      </Stack>
+      <Card>
         <Paper className="p-4">
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-            mb={5}
-          >
-            <Typography variant="h4" gutterBottom>
-              Valuations
+          <Paper elevation={3} style={{ padding: "12px", textAlign: "right" }}>
+            <Typography variant="body1" color="textSecondary">
+              Total Valuation Amount: ${totalAmount.toFixed(2)}
             </Typography>
-            <Button onClick={() => setShowAddValuation(true)} color="primary">
-              <Iconify icon="bi:plus-circle" />{" "}
-            </Button>
-          </Stack>
-          <Typography variant="h6" className="text-right font-bold">
-            Total Valuation Amount: ${totalAmount.toFixed(2)}
-          </Typography>
+          </Paper>
           {property.valuations.length === 0 ? (
             <p>No valuations added yet.</p>
           ) : (
@@ -262,66 +255,69 @@ const ValuationPage = ({ propertyId, onClose }) => {
           <DialogTitle>
             {isEditMode ? "Edit Valuation" : "Add Valuation"}
           </DialogTitle>
-
-          <DialogContent>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  label="Date"
-                  type="date"
-                  value={date}
-                  onChange={handleDateChange}
-                  variant="outlined"
-                  fullWidth
-                  required
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-                {dateError && (
-                  <Typography variant="caption" color="error">
-                    {dateError}
-                  </Typography>
-                )}
+          <Grid>
+            <DialogContent>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Date"
+                    type="date"
+                    value={date}
+                    onChange={handleDateChange}
+                    variant="outlined"
+                    fullWidth
+                    required
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                  {dateError && (
+                    <Typography variant="caption" color="error">
+                      {dateError}
+                    </Typography>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Amount"
+                    type="number"
+                    value={amount}
+                    onChange={handleAmountChange}
+                    variant="outlined"
+                    fullWidth
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Valuation Type"
+                    select
+                    value={valuationType}
+                    onChange={handleValuationTypeChange}
+                    variant="outlined"
+                    fullWidth
+                    required
+                  >
+                    <MenuItem value="formal">Formal</MenuItem>
+                    <MenuItem value="informal">Informal</MenuItem>
+                  </TextField>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button onClick={handleCancel} color="secondary" fullWidth>
+                    Cancel
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button onClick={handleSubmit} color="primary" fullWidth variant="contained">
+                    {editingValuation ? "Update Valuation" : "Add Valuation"}
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Amount"
-                  type="number"
-                  value={amount}
-                  onChange={handleAmountChange}
-                  variant="outlined"
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Valuation Type"
-                  select
-                  value={valuationType}
-                  onChange={handleValuationTypeChange}
-                  variant="outlined"
-                  fullWidth
-                  required
-                >
-                  <MenuItem value="formal">Formal</MenuItem>
-                  <MenuItem value="informal">Informal</MenuItem>
-                </TextField>
-              </Grid>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCancel} color="secondary">
-              Cancel
-            </Button>
-            <Button onClick={handleSubmit} color="primary">
-              {editingValuation ? "Update Valuation" : "Add Valuation"}
-            </Button>
-          </DialogActions>
+            </DialogContent>
+          </Grid>
         </Dialog>
-      </Container>
-    </Card>
+      </Card>
+    </Grid>
   );
 };
 
