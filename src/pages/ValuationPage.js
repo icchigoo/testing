@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { editProperty } from "../features/property/propertySlice";
-import propertyService from "../features/property/propertyService";
 import {
   Card,
   Typography,
@@ -16,20 +15,17 @@ import {
   Paper,
   IconButton,
   Stack,
-  Container,
   Grid,
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
-  MenuItem,
+  MenuItem
 } from "@mui/material";
 import { Edit, Delete, Add } from "@mui/icons-material";
-import Iconify from "../components/iconify/Iconify";
+import LoadingSpinner from "../components/spinner/LoadingSpinner";
 
-const ValuationPage = ({ propertyId, onClose }) => {
+const ValuationPage = ({ property, onClose }) => {
   const dispatch = useDispatch();
-  const [property, setProperty] = useState(null);
   const [date, setDate] = useState("");
   const [amount, setAmount] = useState("");
   const [valuationType, setValuationType] = useState("");
@@ -38,19 +34,6 @@ const ValuationPage = ({ propertyId, onClose }) => {
   const [showAddValuation, setShowAddValuation] = useState(false);
   const [editingValuation, setEditingValuation] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
-
-  useEffect(() => {
-    const fetchPropertyLoans = async () => {
-      try {
-        const response = await propertyService.getPropertyById(propertyId);
-        setProperty(response);
-      } catch (error) {
-        console.error("Error fetching property loans:", error);
-      }
-    };
-
-    fetchPropertyLoans();
-  }, [propertyId]);
 
   useEffect(() => {
     if (property && property.valuations) {
@@ -114,7 +97,7 @@ const ValuationPage = ({ propertyId, onClose }) => {
         valuations: updatedValuations,
       };
 
-      dispatch(editProperty({ id: propertyId, updatedProperty }))
+      dispatch(editProperty({ id: property.id, updatedProperty }))
         .then(() => {
           setDate("");
           setAmount("");
@@ -132,7 +115,7 @@ const ValuationPage = ({ propertyId, onClose }) => {
         valuations: [...property.valuations, valuationData],
       };
 
-      dispatch(editProperty({ id: propertyId, updatedProperty }))
+      dispatch(editProperty({ id: property.id, updatedProperty }))
         .then(() => {
           setDate("");
           setAmount("");
@@ -155,7 +138,7 @@ const ValuationPage = ({ propertyId, onClose }) => {
       valuations: updatedValuations,
     };
 
-    dispatch(editProperty({ id: propertyId, updatedProperty }))
+    dispatch(editProperty({ id: property.id, updatedProperty }))
       .then(() => {})
       .catch((error) => {
         console.error("Error deleting valuation:", error);
@@ -170,8 +153,8 @@ const ValuationPage = ({ propertyId, onClose }) => {
     setDate(valuationToEdit.date);
     setAmount(valuationToEdit.amount);
     setValuationType(valuationToEdit.type);
-    setEditingValuation(valuationToEdit); // Set the editing valuation data
-    setIsEditMode(true); // Set the dialog mode to edit
+    setEditingValuation(valuationToEdit);
+    setIsEditMode(true);
     setShowAddValuation(true);
   };
 
@@ -179,13 +162,13 @@ const ValuationPage = ({ propertyId, onClose }) => {
     setDate("");
     setAmount("");
     setValuationType("");
-    setEditingValuation(null); // Reset the editing valuation data
-    setIsEditMode(false); // Reset the dialog mode to add
+    setEditingValuation(null);
+    setIsEditMode(false);
     setShowAddValuation(false);
   };
 
   if (!property) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
   return (
     <Grid>

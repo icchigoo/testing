@@ -1,28 +1,7 @@
-import React, { useEffect, useState } from "react";
-import propertyService from "../features/property/propertyService";
-import LoadingSpinner from "../components/spinner/LoadingSpinner";
+import React from "react";
 import { Typography, AccordionDetails, Grid, Card } from "@mui/material";
 
-const OverviewPage = ({ propertyId, onClose }) => {
-  const [property, setProperty] = useState(null);
-
-  useEffect(() => {
-    const fetchPropertyDetails = async () => {
-      try {
-        const response = await propertyService.getPropertyById(propertyId);
-        setProperty(response);
-      } catch (error) {
-        console.error("Error fetching property details:", error);
-      }
-    };
-
-    fetchPropertyDetails();
-  }, [propertyId]);
-
-  if (!property) {
-    return <LoadingSpinner />;
-  }
-
+const OverviewPage = ({ property, onClose }) => {
   const formatCurrency = (value) => {
     return value?.toLocaleString("en-US", {
       style: "currency",

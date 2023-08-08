@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { editProperty } from "../features/property/propertySlice";
-import propertyService from "../features/property/propertyService";
 import {
   Card,
   Typography,
@@ -16,7 +15,6 @@ import {
   Paper,
   IconButton,
   Stack,
-  Container,
   Grid,
   Dialog,
   DialogTitle,
@@ -26,9 +24,8 @@ import {
 import { Edit, Delete, Add } from "@mui/icons-material";
 import LoadingSpinner from "../components/spinner/LoadingSpinner";
 
-const LoanPage = ({ propertyId, onClose }) => {
+const LoanPage = ({ property, onClose }) => {
   const dispatch = useDispatch();
-  const [property, setProperty] = useState(null);
   const [loanName, setLoanName] = useState("");
   const [loanAmount, setLoanAmount] = useState("");
   const [loanTerm, setLoanTerm] = useState("");
@@ -36,19 +33,6 @@ const LoanPage = ({ propertyId, onClose }) => {
   const [loanDate, setLoanDate] = useState("");
   const [showAddLoan, setShowAddLoan] = useState(false);
   const [editIndex, setEditIndex] = useState(null); // Track the index of the loan being edited
-
-  useEffect(() => {
-    const fetchPropertyLoans = async () => {
-      try {
-        const response = await propertyService.getPropertyById(propertyId);
-        setProperty(response);
-      } catch (error) {
-        console.error("Error fetching property loans:", error);
-      }
-    };
-
-    fetchPropertyLoans();
-  }, [propertyId]);
 
   useEffect(() => {
     if (editIndex !== null && property && property.loan) {
@@ -107,7 +91,7 @@ const LoanPage = ({ propertyId, onClose }) => {
       loan: updatedLoans,
     };
 
-    dispatch(editProperty({ id: propertyId, updatedProperty }))
+    dispatch(editProperty({ id: property.id, updatedProperty }))
       .then(() => {
         setLoanName("");
         setLoanAmount("");
@@ -162,7 +146,7 @@ const LoanPage = ({ propertyId, onClose }) => {
         loan: updatedLoans,
       };
 
-      dispatch(editProperty({ id: propertyId, updatedProperty }))
+      dispatch(editProperty({ id: property.id, updatedProperty }))
         .then(() => {
           // Deletion successful, do any additional actions here if needed
         })
@@ -255,7 +239,6 @@ const LoanPage = ({ propertyId, onClose }) => {
           <DialogTitle>
             {editIndex !== null ? "Edit Loan" : "Add Loan"}
           </DialogTitle>
-          <Grid>
           <DialogContent>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -316,31 +299,16 @@ const LoanPage = ({ propertyId, onClose }) => {
                   }}
                 />
               </Grid>
-              <Grid item xs={6}>
-                {/* Cancel Button */}
-                <Button
-                  onClick={() => setShowAddLoan(false)}
-                  color="secondary"
-                  fullWidth
-                >
-                  Cancel
-                </Button>
-              </Grid>
-              <Grid item xs={6}>
-                {/* Add Loan Button */}
-                <Button
-                  onClick={handleSubmitLoan}
-                  color="primary"
-                  variant="contained"
-                  fullWidth
-                >
-                  {editIndex !== null ? "Update Loan" : "Add Loan"}
-                </Button>
-              </Grid>
             </Grid>
-            
           </DialogContent>
-          </Grid>
+          <DialogActions>
+            <Button onClick={handleCancelEdit} color="secondary">
+              Cancel
+            </Button>
+            <Button onClick={handleSubmitLoan} color="primary">
+              {editIndex !== null ? "Update Loan" : "Add Loan"}
+            </Button>
+          </DialogActions>
         </Dialog>
       </Card>
     </Grid>
