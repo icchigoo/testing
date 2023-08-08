@@ -115,7 +115,7 @@ const ValuationPage = ({ property, onClose }) => {
         valuations: [...property.valuations, valuationData],
       };
 
-      dispatch(editProperty({ id: property.id, updatedProperty }))
+      dispatch(editProperty({ id: property._id, updatedProperty }))
         .then(() => {
           setDate("");
           setAmount("");
@@ -138,7 +138,7 @@ const ValuationPage = ({ property, onClose }) => {
       valuations: updatedValuations,
     };
 
-    dispatch(editProperty({ id: property.id, updatedProperty }))
+    dispatch(editProperty({ id: property._id, updatedProperty }))
       .then(() => {})
       .catch((error) => {
         console.error("Error deleting valuation:", error);

@@ -91,7 +91,7 @@ const LoanPage = ({ property, onClose }) => {
       loan: updatedLoans,
     };
 
-    dispatch(editProperty({ id: property.id, updatedProperty }))
+    dispatch(editProperty({ id: property._id, updatedProperty }))
       .then(() => {
         setLoanName("");
         setLoanAmount("");
@@ -146,7 +146,7 @@ const LoanPage = ({ property, onClose }) => {
         loan: updatedLoans,
       };
 
-      dispatch(editProperty({ id: property.id, updatedProperty }))
+      dispatch(editProperty({ id: property._id, updatedProperty }))
         .then(() => {
           // Deletion successful, do any additional actions here if needed
         })

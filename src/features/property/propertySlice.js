@@ -1,23 +1,59 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import propertyService from "./propertyService";
 
-// Abstracted async thunk creation function
-const createPropertyAsyncThunk = (name, serviceFunction) =>
-  createAsyncThunk(`property/${name}`, async (payload, thunkAPI) => {
+// Async thunk to get all properties
+export const getProperty = createAsyncThunk(
+  "property/getProperties",
+  async (_, thunkAPI) => {
     try {
-      return await serviceFunction(payload);
+      return await propertyService.getProperty();
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  });
+  }
+);
 
-// Create async thunks
-export const getProperty = createPropertyAsyncThunk("getProperties", propertyService.getProperty);
-export const getPropertyById = createPropertyAsyncThunk("getPropertyById", propertyService.getPropertyById);
-export const createProperty = createPropertyAsyncThunk("createProperty", propertyService.createProperty);
-export const editProperty = createPropertyAsyncThunk("editProperty", propertyService.editProperty);
+// Async thunk to get a property by ID
+// Inside getPropertyById async thunk
+export const getPropertyById = createAsyncThunk(
+  "property/getPropertyById",
+  async (id, thunkAPI) => {
+    try {
+      const response = await propertyService.getPropertyById(id);
 
+      return response;
+    } catch (error) {
+      console.error("Error fetching property by ID:", error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
+// Async thunk to create a property
+export const createProperty = createAsyncThunk(
+  "property/createProperty",
+  async (propertyData, thunkAPI) => {
+    try {
+      return await propertyService.createProperty(propertyData);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+// Async thunk to edit a property
+export const editProperty = createAsyncThunk(
+  "property/editProperty",
+  async ({ id, updatedProperty }, thunkAPI) => {
+    try {
+      return await propertyService.editProperty(id, updatedProperty);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const resetState = createAction("Reset_all");
 
 const initialState = {
   properties: [],
@@ -29,13 +65,10 @@ const initialState = {
 };
 
 // Slice for managing property state
-const propertySlice = createSlice({
+export const propertySlice = createSlice({
   name: "property",
   initialState,
-  reducers: {
-    // ... Other reducer actions ...
-    resetState: () => initialState,
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getProperty.pending, (state) => {
@@ -54,11 +87,60 @@ const propertySlice = createSlice({
         state.message = action.error;
       })
 
-
-
+      .addCase(getPropertyById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getPropertyById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.selectedProperty = action.payload;
+      })
+      .addCase(getPropertyById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
+      .addCase(createProperty.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createProperty.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.createdProperty = action.payload;
+      })
+      .addCase(createProperty.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
+      .addCase(editProperty.pending, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(editProperty.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        // Find the index of the edited property in the properties array
+        const editedPropertyIndex = state.properties.findIndex(
+          (p) => p._id === action.payload._id
+        );
+        if (editedPropertyIndex !== -1) {
+          // Update the property in the array
+          state.properties[editedPropertyIndex] = action.payload;
+        }
+      })
+      .addCase(editProperty.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
       .addCase(resetState, () => initialState);
   },
 });
 
-export const { resetState } = propertySlice.actions;
 export default propertySlice.reducer;
