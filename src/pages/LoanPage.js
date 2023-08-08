@@ -239,6 +239,7 @@ const LoanPage = ({ property, onClose }) => {
           <DialogTitle>
             {editIndex !== null ? "Edit Loan" : "Add Loan"}
           </DialogTitle>
+          <Grid>
           <DialogContent>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -301,6 +302,7 @@ const LoanPage = ({ property, onClose }) => {
               </Grid>
             </Grid>
           </DialogContent>
+          </Grid>
           <DialogActions>
             <Button onClick={handleCancelEdit} color="secondary">
               Cancel
