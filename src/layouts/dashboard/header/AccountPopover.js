@@ -7,10 +7,10 @@ import { fetchUser, logout } from '../../../features/auth/authSlice';
 import { useNavigate } from "react-router-dom";
 
 const MENU_OPTIONS = [
-  {
-    label: 'Home',
-    icon: 'eva:home-fill',
-  },
+  // {
+  //   label: 'Home',
+  //   icon: 'eva:home-fill',
+  // },
   {
     label: 'Profile',
     icon: 'eva:person-fill',
