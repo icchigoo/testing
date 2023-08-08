@@ -1,7 +1,6 @@
-import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import propertyService from "./propertyService";
 
-// Async thunk to get all properties
 export const getProperty = createAsyncThunk(
   "property/getProperties",
   async (_, thunkAPI) => {
@@ -13,15 +12,11 @@ export const getProperty = createAsyncThunk(
   }
 );
 
-// Async thunk to get a property by ID
-// Inside getPropertyById async thunk
 export const getPropertyById = createAsyncThunk(
   "property/getPropertyById",
   async (id, thunkAPI) => {
     try {
-      const response = await propertyService.getPropertyById(id);
-
-      return response;
+      return await propertyService.getPropertyById(id);
     } catch (error) {
       console.error("Error fetching property by ID:", error);
       return thunkAPI.rejectWithValue(error);
@@ -29,7 +24,6 @@ export const getPropertyById = createAsyncThunk(
   }
 );
 
-// Async thunk to create a property
 export const createProperty = createAsyncThunk(
   "property/createProperty",
   async (propertyData, thunkAPI) => {
@@ -41,7 +35,6 @@ export const createProperty = createAsyncThunk(
   }
 );
 
-// Async thunk to edit a property
 export const editProperty = createAsyncThunk(
   "property/editProperty",
   async ({ id, updatedProperty }, thunkAPI) => {
@@ -53,93 +46,65 @@ export const editProperty = createAsyncThunk(
   }
 );
 
-export const resetState = createAction("Reset_all");
-
 const initialState = {
   properties: [],
-  isError: false,
   isLoading: false,
+  isError: false,
   isSuccess: false,
   message: "",
-  createdProperty: null,
+  selectedProperty: null, // Renamed from createdProperty
 };
 
-// Slice for managing property state
-export const propertySlice = createSlice({
+const propertySlice = createSlice({
   name: "property",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getProperty.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getProperty.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.isSuccess = true;
-        state.properties = action.payload;
-      })
-      .addCase(getProperty.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error;
-      })
-
-      .addCase(getPropertyById.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getPropertyById.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.isSuccess = true;
-        state.selectedProperty = action.payload;
-      })
-      .addCase(getPropertyById.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error;
-      })
-      .addCase(createProperty.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(createProperty.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.isSuccess = true;
-        state.createdProperty = action.payload;
-      })
-      .addCase(createProperty.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error;
-      })
-      .addCase(editProperty.pending, (state) => {
-        state.isLoading = false;
-      })
-      .addCase(editProperty.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.isSuccess = true;
-        // Find the index of the edited property in the properties array
-        const editedPropertyIndex = state.properties.findIndex(
-          (p) => p._id === action.payload._id
-        );
-        if (editedPropertyIndex !== -1) {
-          // Update the property in the array
-          state.properties[editedPropertyIndex] = action.payload;
+      .addMatcher(
+        (action) =>
+          [
+            getProperty.pending,
+            getPropertyById.pending,
+            createProperty.pending,
+            editProperty.pending,
+          ].includes(action.type),
+        (state) => {
+          state.isLoading = true;
+          state.isError = false;
+          state.isSuccess = false;
+          state.message = "";
         }
-      })
-      .addCase(editProperty.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error;
-      })
-      .addCase(resetState, () => initialState);
+      )
+      .addMatcher(
+        (action) =>
+          [
+            getProperty.fulfilled,
+            getPropertyById.fulfilled,
+            createProperty.fulfilled,
+            editProperty.fulfilled,
+          ].includes(action.type),
+        (state, action) => {
+          state.isLoading = false;
+          state.isSuccess = true;
+          state.properties = action.payload || state.properties;
+          state.selectedProperty = action.payload || state.selectedProperty;
+        }
+      )
+      .addMatcher(
+        (action) =>
+          [
+            getProperty.rejected,
+            getPropertyById.rejected,
+            createProperty.rejected,
+            editProperty.rejected,
+          ].includes(action.type),
+        (state, action) => {
+          state.isLoading = false;
+          state.isError = true;
+          state.message = action.error.message || "An error occurred.";
+        }
+      );
   },
 });
 
