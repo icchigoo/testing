@@ -23,7 +23,7 @@ import { usePropertyContext } from "../context/PropertyContext";
 const AddTransaction = () => {
   const { propertyId } = useParams(); 
   const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
-  const properties = usePropertyContext();
+  const { properties } = usePropertyContext();
   const propertyDetails = properties.find(
     (property) => property._id === propertyId
   );

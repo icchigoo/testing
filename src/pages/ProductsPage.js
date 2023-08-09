@@ -21,7 +21,7 @@ const StyledProductImg = styled("img")({
 });
 
 const PropertyList = () => {
-  const properties = usePropertyContext();
+  const {properties} = usePropertyContext();
   const imageHeight = "250px"; // Adjust the image height as needed
   const selectedImageIndex = 0; // You can adjust this index as needed
 

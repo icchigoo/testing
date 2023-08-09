@@ -3,9 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import Dropzone from "react-dropzone";
-
 import { delImg, uploadImg } from "../features/upload/uploadSlice";
-import { createProperty } from "../features/property/propertySlice";
 import {
   Container,
   Typography,
@@ -23,6 +21,7 @@ import {
 } from "@mui/material";
 import { CameraAlt, Close } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import { usePropertyContext } from "../context/PropertyContext";
 
 const schema = Yup.object().shape({
   address: Yup.string().required("Address is required"),
@@ -37,6 +36,7 @@ const schema = Yup.object().shape({
 });
 
 const AddProperty = () => {
+  const { addProperty } = usePropertyContext();
   const dispatch = useDispatch();
   const [showAlert, setShowAlert] = useState(false);
   const [images, setImages] = useState([]);
@@ -64,7 +64,7 @@ const AddProperty = () => {
     },
     validationSchema: schema,
     onSubmit: async (values, { resetForm }) => {
-      await dispatch(createProperty(values));
+      await addProperty(values); // Using the context function
       resetForm();
       setShowAlert(true);
       setTimeout(() => {

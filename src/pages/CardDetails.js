@@ -27,7 +27,7 @@ const CardDetails = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const theme = useTheme();
-  const properties = usePropertyContext();
+  const { properties } = usePropertyContext();
   const propertyDetails = properties.find(
     (property) => property._id === propertyId
   );

@@ -21,12 +21,27 @@ export const PropertyProvider = ({ children }) => {
     }
   };
 
+  const addProperty = async (propertyData) => {
+    try {
+      const response = await axios.post(`${base_url}property`, propertyData, config);
+      const createdProperty = response.data;
+
+      // Update the properties state to include the newly created property
+      setProperties((prevProperties) => [...prevProperties, createdProperty]);
+    } catch (error) {
+      console.error("Error creating property:", error);
+    }
+  };
+
+
+  
+
   useEffect(() => {
     fetchProperties();
   }, []);
 
   return (
-    <PropertyContext.Provider value={properties}>
+    <PropertyContext.Provider value={{ properties, addProperty }}>
       {children}
     </PropertyContext.Provider>
   );
