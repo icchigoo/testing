@@ -11,11 +11,11 @@ const navConfig = [
     path: '/dashboard/app',
     icon: icon('ic_analytics'),
   },
-  {
-    title: 'property',
-    path: '/dashboard/products',
-    icon: icon('ic_cart'),
-  },
+  // {
+  //   title: 'property',
+  //   path: '/dashboard/products',
+  //   icon: icon('ic_cart'),
+  // },
   {
     title: 'login',
     path: '/login',
@@ -39,6 +39,11 @@ const navConfig = [
   {
     title: 'incomes',
     path: '/dashboard/incomes',
+    icon: icon('ic_lock'),
+  },
+  {
+    title: 'property',
+    path: '/dashboard/propertys',
     icon: icon('ic_lock'),
   },
  

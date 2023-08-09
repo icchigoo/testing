@@ -13,6 +13,7 @@ import AddProperty from './pages/AddProperty';
 import CardDetails from './pages/CardDetails';
 import ExpensesPage from './pages/ExpensesPage';
 import IncomePage from './pages/IncomesPage';
+import PropertyList from './context/PropertyList';
 
 
 
@@ -29,9 +30,10 @@ export default function Router() {
         { path: 'products', element: <ProductsPage /> },
         { path: 'register', element: <RegisterPage /> },
         { path: 'profile', element: <ProfilePage /> },
-        { path: 'property', element: <AddProperty /> },
+        // { path: 'property', element: <AddProperty /> },
         { path: 'expenses', element: <ExpensesPage /> },
         { path: 'incomes', element: <IncomePage /> },
+        { path: 'propertys', element: <PropertyList /> },
         { path: '/dashboard/card-details/:productId', element: <CardDetails /> },
 
 

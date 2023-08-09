@@ -9,13 +9,15 @@ import ThemeProvider from './theme';
 // components
 import { StyledChart } from './components/chart';
 import ScrollToTop from './components/scroll-to-top';
+import { PropertyProvider } from './context/PropertyContext';
 
 // ----------------------------------------------------------------------
 
 export default function App() {
   return (
     <HelmetProvider>
-      <Provider store={store}> {/* Wrap your entire application with the Provider */}
+      <Provider store={store}> 
+      <PropertyProvider>
         <BrowserRouter>
           <ThemeProvider>
             <ScrollToTop />
@@ -23,6 +25,7 @@ export default function App() {
             <Router />
           </ThemeProvider>
         </BrowserRouter>
+        </PropertyProvider>
       </Provider>
     </HelmetProvider>
   );
