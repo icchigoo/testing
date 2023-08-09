@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { editProperty } from "../features/property/propertySlice";
+
 import {
   Container,
   Typography,
@@ -11,10 +10,10 @@ import {
   InputAdornment,
   Alert,
 } from "@mui/material";
+import { usePropertyContext } from "../context/PropertyContext";
 
-
-const EditPropertyPage = ({ property, propertyId, onCancel }) => {
-  const dispatch = useDispatch();
+const EditPropertyPage = ({ property, onCancel }) => {
+  const propertyContext = usePropertyContext();
   const [name, setName] = useState(property.name);
   const [address, setAddress] = useState(property.address);
   const [dateofPurchase, setDateofPurchase] = useState(
@@ -62,21 +61,18 @@ const EditPropertyPage = ({ property, propertyId, onCancel }) => {
       parking,
       sqft,
     };
-    dispatch(editProperty({ id: propertyId, updatedProperty }))
-      .unwrap()
-      .then(() => {
-        // Property updated successfully, perform any necessary actions
+    propertyContext.editProperty(property._id, updatedProperty) // Use the editProperty function from the context
+    .then(() => {
+      setShowSuccessAlert(true);
+    })
+    .catch((error) => {
+      console.error("Error updating property:", error);
+    });
+};
 
-        setShowSuccessAlert(true); // Set the state to true to show the alert
-      })
-      .catch((error) => {
-        console.error("Error updating property:", error);
-      });
-  };
-
-  const handleCancel = () => {
-    onCancel(); // Call the onCancel prop function to exit the edit mode
-  };
+const handleCancel = () => {
+  onCancel(); // Call the onCancel prop function to exit the edit mode
+};
 
   
 
