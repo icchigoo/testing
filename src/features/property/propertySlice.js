@@ -1,55 +1,45 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import propertyService from "./propertyService";
 
-const setLoadingState = (state) => {
-  state.isLoading = true;
-  state.isError = false;
-  state.isSuccess = false;
-  state.message = "";
-};
-
-const setSuccessState = (state, payload) => {
-  state.isLoading = false;
-  state.isError = false;
-  state.isSuccess = true;
-  state.message = "";
-  return payload;
-};
-
-const setErrorState = (state, error) => {
-  state.isLoading = false;
-  state.isError = true;
-  state.isSuccess = false;
-  state.message = error.message;
-};
-
 // Async thunk to get all properties
-export const getProperty = createAsyncThunk("property/getProperties", async (_, thunkAPI) => {
-  try {
-    return await propertyService.getProperty();
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+export const getProperty = createAsyncThunk(
+  "property/getProperties",
+  async (_, thunkAPI) => {
+    try {
+      return await propertyService.getProperty();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
-});
+);
 
 // Async thunk to get a property by ID
-export const getPropertyById = createAsyncThunk("property/getPropertyById", async (id, thunkAPI) => {
-  try {
-    return await propertyService.getPropertyById(id);
-  } catch (error) {
-    console.error("Error fetching property by ID:", error);
-    return thunkAPI.rejectWithValue(error);
+// Inside getPropertyById async thunk
+export const getPropertyById = createAsyncThunk(
+  "property/getPropertyById",
+  async (id, thunkAPI) => {
+    try {
+      const response = await propertyService.getPropertyById(id);
+
+      return response;
+    } catch (error) {
+      console.error("Error fetching property by ID:", error);
+      return thunkAPI.rejectWithValue(error);
+    }
   }
-});
+);
 
 // Async thunk to create a property
-export const createProperty = createAsyncThunk("property/createProperty", async (propertyData, thunkAPI) => {
-  try {
-    return await propertyService.createProperty(propertyData);
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+export const createProperty = createAsyncThunk(
+  "property/createProperty",
+  async (propertyData, thunkAPI) => {
+    try {
+      return await propertyService.createProperty(propertyData);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
-});
+);
 
 // Async thunk to edit a property
 export const editProperty = createAsyncThunk(
@@ -72,7 +62,6 @@ const initialState = {
   isSuccess: false,
   message: "",
   createdProperty: null,
-  selectedProperty: null,
 };
 
 // Slice for managing property state
@@ -82,36 +71,74 @@ export const propertySlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getProperty.pending, setLoadingState)
+      .addCase(getProperty.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(getProperty.fulfilled, (state, action) => {
-        setSuccessState(state, action.payload);
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
         state.properties = action.payload;
       })
-      .addCase(getProperty.rejected, setErrorState)
+      .addCase(getProperty.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
 
-      .addCase(getPropertyById.pending, setLoadingState)
+      .addCase(getPropertyById.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(getPropertyById.fulfilled, (state, action) => {
-        setSuccessState(state, action.payload);
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
         state.selectedProperty = action.payload;
       })
-      .addCase(getPropertyById.rejected, setErrorState)
-
-      .addCase(createProperty.pending, setLoadingState)
+      .addCase(getPropertyById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
+      .addCase(createProperty.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(createProperty.fulfilled, (state, action) => {
-        setSuccessState(state, action.payload);
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
         state.createdProperty = action.payload;
       })
-      .addCase(createProperty.rejected, setErrorState)
-
+      .addCase(createProperty.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
+      .addCase(editProperty.pending, (state) => {
+        state.isLoading = false;
+      })
       .addCase(editProperty.fulfilled, (state, action) => {
-        setSuccessState(state, action.payload);
-        const editedPropertyIndex = state.properties.findIndex((p) => p._id === action.payload._id);
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        // Find the index of the edited property in the properties array
+        const editedPropertyIndex = state.properties.findIndex(
+          (p) => p._id === action.payload._id
+        );
         if (editedPropertyIndex !== -1) {
+          // Update the property in the array
           state.properties[editedPropertyIndex] = action.payload;
         }
       })
-      .addCase(editProperty.rejected, setErrorState)
-
+      .addCase(editProperty.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
       .addCase(resetState, () => initialState);
   },
 });
