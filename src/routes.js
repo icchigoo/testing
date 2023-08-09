@@ -17,6 +17,7 @@ import PropertyList from './context/PropertyList';
 
 
 
+
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -34,8 +35,8 @@ export default function Router() {
         { path: 'expenses', element: <ExpensesPage /> },
         { path: 'incomes', element: <IncomePage /> },
         { path: 'propertys', element: <PropertyList /> },
-        { path: '/dashboard/card-details/:productId', element: <CardDetails /> },
-
+        { path: '/dashboard/card-details/:propertyId', element: <CardDetails /> },
+     
 
       ],
     },
