@@ -23,6 +23,7 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 
 const TransactionTable = ({ propertyId }) => {
+  
   const dispatch = useDispatch();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editedTransaction, setEditedTransaction] = useState(null);

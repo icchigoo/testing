@@ -97,7 +97,7 @@ const ValuationPage = ({ property, onClose }) => {
         valuations: updatedValuations,
       };
 
-      dispatch(editProperty({ id: property.id, updatedProperty }))
+      dispatch(editProperty({ id: property._id, updatedProperty }))
         .then(() => {
           setDate("");
           setAmount("");

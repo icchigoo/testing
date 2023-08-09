@@ -17,9 +17,16 @@ import {
 } from "@mui/material";
 import { Add, Cancel } from "@mui/icons-material";
 import TransactionTable from "../components/transaction/TransactionTable";
+import { useParams } from "react-router-dom";
+import { usePropertyContext } from "../context/PropertyContext";
 
-const AddTransaction = ({ propertyId }) => {
+const AddTransaction = () => {
+  const { propertyId } = useParams(); 
   const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
+  const properties = usePropertyContext();
+  const propertyDetails = properties.find(
+    (property) => property._id === propertyId
+  );
   const [newTransactions, setNewTransactions] = useState([
     {
       date: "",
