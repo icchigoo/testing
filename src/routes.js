@@ -30,7 +30,7 @@ export default function Router() {
         { path: 'products', element: <ProductsPage /> },
         { path: 'register', element: <RegisterPage /> },
         { path: 'profile', element: <ProfilePage /> },
-        // { path: 'property', element: <AddProperty /> },
+        { path: 'property', element: <AddProperty /> },
         { path: 'expenses', element: <ExpensesPage /> },
         { path: 'incomes', element: <IncomePage /> },
         { path: 'propertys', element: <PropertyList /> },
