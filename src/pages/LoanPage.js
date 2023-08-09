@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { editProperty } from "../features/property/propertySlice";
 import {
   Card,
   Typography,
@@ -23,16 +21,17 @@ import {
 } from "@mui/material";
 import { Edit, Delete, Add } from "@mui/icons-material";
 import LoadingSpinner from "../components/spinner/LoadingSpinner";
+import { usePropertyContext } from "../context/PropertyContext";
 
 const LoanPage = ({ property, onClose }) => {
-  const dispatch = useDispatch();
+  const propertyContext = usePropertyContext();
   const [loanName, setLoanName] = useState("");
   const [loanAmount, setLoanAmount] = useState("");
   const [loanTerm, setLoanTerm] = useState("");
   const [loanInterestRate, setLoanInterestRate] = useState("");
   const [loanDate, setLoanDate] = useState("");
   const [showAddLoan, setShowAddLoan] = useState(false);
-  const [editIndex, setEditIndex] = useState(null); // Track the index of the loan being edited
+  const [editIndex, setEditIndex] = useState(null);
 
   useEffect(() => {
     if (editIndex !== null && property && property.loan) {
@@ -76,22 +75,18 @@ const LoanPage = ({ property, onClose }) => {
       date: loanDate,
     };
 
-    let updatedLoans = [...property.loan];
-
-    if (editIndex !== null) {
-      // Update existing loan
-      updatedLoans[editIndex] = newLoan;
-    } else {
-      // Add new loan
-      updatedLoans = [...property.loan, newLoan];
-    }
+    const updatedLoans = editIndex !== null
+      ? property.loan.map((loan, index) =>
+          index === editIndex ? newLoan : loan
+        )
+      : [...property.loan, newLoan];
 
     const updatedProperty = {
       ...property,
       loan: updatedLoans,
     };
 
-    dispatch(editProperty({ id: property._id, updatedProperty }))
+    propertyContext.editProperty(property._id, updatedProperty)
       .then(() => {
         setLoanName("");
         setLoanAmount("");
@@ -108,7 +103,7 @@ const LoanPage = ({ property, onClose }) => {
 
   const handleEditLoan = (loanIndex) => {
     setEditIndex(loanIndex);
-    setShowAddLoan(true); // Show the edit section when editing a loan
+    setShowAddLoan(true);
   };
 
   const handleCancelEdit = () => {
@@ -120,17 +115,6 @@ const LoanPage = ({ property, onClose }) => {
     setLoanDate("");
     setShowAddLoan(false);
   };
-
-  useEffect(() => {
-    if (!showAddLoan) {
-      setEditIndex(null);
-      setLoanName("");
-      setLoanAmount("");
-      setLoanTerm("");
-      setLoanInterestRate("");
-      setLoanDate("");
-    }
-  }, [showAddLoan]);
 
   const handleLoanDelete = (loanIndex) => {
     const confirmDelete = window.confirm(
@@ -146,13 +130,12 @@ const LoanPage = ({ property, onClose }) => {
         loan: updatedLoans,
       };
 
-      dispatch(editProperty({ id: property._id, updatedProperty }))
+      propertyContext.editProperty(property._id, updatedProperty)
         .then(() => {
           // Deletion successful, do any additional actions here if needed
         })
         .catch((error) => {
           console.error("Error deleting loan:", error);
-          // Handle the error, show an error message, or perform any recovery actions
         });
     }
   };
@@ -161,7 +144,6 @@ const LoanPage = ({ property, onClose }) => {
     return <LoadingSpinner />;
   }
 
-  // Calculate total loan balance
   const totalLoanBalance = property.loan.reduce((acc, loan) => {
     return acc + parseFloat(loan.loanAmountRemaining);
   }, 0);

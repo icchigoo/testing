@@ -23,7 +23,11 @@ export const PropertyProvider = ({ children }) => {
 
   const addProperty = async (propertyData) => {
     try {
-      const response = await axios.post(`${base_url}property`, propertyData, config);
+      const response = await axios.post(
+        `${base_url}property`,
+        propertyData,
+        config
+      );
       const createdProperty = response.data;
 
       // Update the properties state to include the newly created property
@@ -33,15 +37,32 @@ export const PropertyProvider = ({ children }) => {
     }
   };
 
+  const editProperty = async (id, updatedProperty) => {
+    try {
+      const response = await axios.patch(
+        `${base_url}property/${id}`,
+        updatedProperty,
+        config
+      );
+      const editedProperty = response.data;
 
-  
+      // Update the properties state to include the updated property
+      setProperties((prevProperties) =>
+        prevProperties.map((property) =>
+          property._id === editedProperty._id ? editedProperty : property
+        )
+      );
+    } catch (error) {
+      console.error("Error editing property:", error);
+    }
+  };
 
   useEffect(() => {
     fetchProperties();
   }, []);
 
   return (
-    <PropertyContext.Provider value={{ properties, addProperty }}>
+    <PropertyContext.Provider value={{ properties, addProperty, editProperty }}>
       {children}
     </PropertyContext.Provider>
   );

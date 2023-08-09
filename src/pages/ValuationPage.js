@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { editProperty } from "../features/property/propertySlice";
 import {
   Card,
   Typography,
@@ -23,9 +21,10 @@ import {
 } from "@mui/material";
 import { Edit, Delete, Add } from "@mui/icons-material";
 import LoadingSpinner from "../components/spinner/LoadingSpinner";
+import { usePropertyContext } from "../context/PropertyContext";
 
 const ValuationPage = ({ property, onClose }) => {
-  const dispatch = useDispatch();
+  const propertyContext = usePropertyContext();
   const [date, setDate] = useState("");
   const [amount, setAmount] = useState("");
   const [valuationType, setValuationType] = useState("");
@@ -97,7 +96,7 @@ const ValuationPage = ({ property, onClose }) => {
         valuations: updatedValuations,
       };
 
-      dispatch(editProperty({ id: property._id, updatedProperty }))
+      propertyContext.editProperty(property._id, updatedProperty)
         .then(() => {
           setDate("");
           setAmount("");
@@ -115,7 +114,7 @@ const ValuationPage = ({ property, onClose }) => {
         valuations: [...property.valuations, valuationData],
       };
 
-      dispatch(editProperty({ id: property._id, updatedProperty }))
+      propertyContext.editProperty(property._id, updatedProperty)
         .then(() => {
           setDate("");
           setAmount("");
@@ -138,7 +137,7 @@ const ValuationPage = ({ property, onClose }) => {
       valuations: updatedValuations,
     };
 
-    dispatch(editProperty({ id: property._id, updatedProperty }))
+    propertyContext.editProperty(property._id, updatedProperty)
       .then(() => {})
       .catch((error) => {
         console.error("Error deleting valuation:", error);
