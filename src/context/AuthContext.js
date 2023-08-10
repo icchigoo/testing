@@ -20,9 +20,18 @@ export const AuthProvider = ({ children }) => {
       throw new Error(error instanceof Error ? error.message : String(error));
     }
   };
+  const logout = async () => {
+    try {
+      // Clear the user data
+      setUser(null);
+    } catch (error) {
+      console.error("Error logging out:", error);
+      throw new Error(error instanceof Error ? error.message : String(error));
+    }
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

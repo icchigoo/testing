@@ -13,8 +13,7 @@ import Scrollbar from '../../../components/scrollbar';
 import NavSection from '../../../components/nav-section';
 //
 import navConfig from './config';
-import { fetchUser } from '../../../features/auth/authSlice';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAuthContext } from '../../../context/AuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -39,9 +38,9 @@ Nav.propTypes = {
 
 export default function Nav({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
-  const user = useSelector((state) => state.auth.user);
   const isDesktop = useResponsive('up', 'lg');
-  const dispatch = useDispatch();
+  const { user, login } = useAuthContext();
+
 
   useEffect(() => {
     if (openNav) {
@@ -50,14 +49,7 @@ export default function Nav({ openNav, onCloseNav }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  useEffect(() => {
-    if (!user || !user._id) {
-      // Fetch the user only if it is not already available in the Redux store
-      if (user) {
-        dispatch(fetchUser(user._id));
-      }
-    }
-  }, [dispatch, user]);
+ 
 
   
 
