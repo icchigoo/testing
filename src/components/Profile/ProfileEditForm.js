@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { updateUser } from "../../features/auth/authSlice";
+
 
 import { styled } from "@mui/material/styles";
 import {
@@ -40,8 +39,7 @@ const DeleteCard = styled("div")(({ theme }) => ({
 }));
 
 function ProfileEditForm({ onCancel }) {
-  const dispatch = useDispatch();
-  const { user } = useAuthContext();
+  const { user, updateUser } = useAuthContext();
 
   const [userData] = useState({
     firstname: user.firstname,
@@ -49,7 +47,7 @@ function ProfileEditForm({ onCancel }) {
     email: user.email,
     mobile: user.mobile,
     address: user.address,
-    images: user.images,
+    // images: user.images,
     country: user.country,
     postalCode: user.postalCode,
     taxId: user.taxId,
@@ -62,7 +60,7 @@ function ProfileEditForm({ onCancel }) {
       email: userData.email,
       mobile: userData.mobile,
       address: userData.address,
-      images: userData.images,
+      // images: userData.images,
       country: userData.country,
       postalCode: userData.postalCode,
       taxId: userData.taxId,
@@ -72,30 +70,25 @@ function ProfileEditForm({ onCancel }) {
     },
   });
 
-  const handleSubmit = () => {
-    const updatedUserData = {
-      firstname: formik.values.firstname,
-      lastname: formik.values.lastname,
-      email: formik.values.email,
-      mobile: formik.values.mobile,
-      address: formik.values.address,
+  const handleSubmit = async () => {
+    try {
+      const updatedUserData = {
+        firstname: formik.values.firstname,
+        lastname: formik.values.lastname,
+        email: formik.values.email,
+        mobile: formik.values.mobile,
+        address: formik.values.address,
+        // images: formik.values.images,
+        country: formik.values.country,
+        postalCode: formik.values.postalCode,
+        taxId: formik.values.taxId,
+      };
 
-      country: formik.values.country,
-      postalCode: formik.values.postalCode,
-      taxId: formik.values.taxId,
-    };
-
-    dispatch(updateUser(updatedUserData))
-      .unwrap()
-      .then(() => {
-        // Handle success
-
-        console.log("User updated successfully");
-      })
-      .catch((error) => {
-        // Handle error
-        console.error("Error updating user:", error);
-      });
+      await updateUser(updatedUserData);
+      console.log("User updated successfully");
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
   };
 
   return (
