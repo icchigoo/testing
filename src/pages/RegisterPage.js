@@ -2,39 +2,43 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { styled } from "@mui/material/styles";
-import { Link, Container, Typography, Stack, Button, TextField, Checkbox } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { createUser } from "../features/auth/authSlice";
+import {
+  Link,
+  Container,
+  Typography,
+  Stack,
+  Button,
+  TextField,
+  Checkbox,
+} from "@mui/material";
 import Logo from "../components/logo";
 import { useAuthContext } from "../context/AuthContext";
 
 const StyledRoot = styled("div")(({ theme }) => ({
-    [theme.breakpoints.up("md")]: {
-      display: "flex",
-    },
-  }));
-  
-  const StyledSection = styled("div")(({ theme }) => ({
-    width: "100%",
-    maxWidth: 480,
+  [theme.breakpoints.up("md")]: {
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    boxShadow: theme.customShadows.card,
-    backgroundColor: theme.palette.background.default,
-  }));
-  
-  const StyledContent = styled("div")(({ theme }) => ({
-    maxWidth: 480,
-    margin: "auto",
-    minHeight: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
-    padding: theme.spacing(12, 0),
-  }));
+  },
+}));
 
+const StyledSection = styled("div")(({ theme }) => ({
+  width: "100%",
+  maxWidth: 480,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  boxShadow: theme.customShadows.card,
+  backgroundColor: theme.palette.background.default,
+}));
 
+const StyledContent = styled("div")(({ theme }) => ({
+  maxWidth: 480,
+  margin: "auto",
+  minHeight: "100vh",
+  display: "flex",
+  justifyContent: "center",
+  flexDirection: "column",
+  padding: theme.spacing(12, 0),
+}));
 
 export default function RegisterPage() {
   const authContext = useAuthContext();
@@ -55,7 +59,13 @@ export default function RegisterPage() {
     try {
       setIsLoading(true);
       // Use the createUser function from the authentication context
-      const response = await authContext.createUser({ firstname, lastname, email, password, mobile });
+      const response = await authContext.createUser({
+        firstname,
+        lastname,
+        email,
+        password,
+        mobile,
+      });
       if (response !== null) {
         // Handle successful registration (e.g., show a success message, redirect to dashboard)
       } else {
@@ -67,7 +77,7 @@ export default function RegisterPage() {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   return (
     <>
@@ -90,7 +100,7 @@ export default function RegisterPage() {
           </Typography>
           <img src="/assets/illustrations/illustration_login.png" alt="login" />
         </StyledSection>
-        
+
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" gutterBottom>
@@ -99,7 +109,9 @@ export default function RegisterPage() {
 
             <Typography variant="body2" sx={{ mb: 5 }}>
               Already have an account? {""}
-              <Link variant="subtitle2" href="/login">Login</Link>
+              <Link variant="subtitle2" href="/login">
+                Login
+              </Link>
             </Typography>
 
             <form onSubmit={handleSubmit}>
@@ -115,25 +127,41 @@ export default function RegisterPage() {
                   type={showPassword ? "text" : "password"}
                   InputProps={{
                     endAdornment: (
-                      // Eye icon button to toggle password visibility
-                      <Button onClick={() => setShowPassword(!showPassword)}>{showPassword ? "Hide" : "Show"}</Button>
+                      <Button onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? "Hide" : "Show"}
+                      </Button>
                     ),
                   }}
                   required
                 />
-
-                {/* Add other registration form fields as needed */}
-                {/* <TextField name="mobile" label="Mobile Number" /> */}
-                {/* <TextField name="address" label="Address" /> */}
               </Stack>
 
-              <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-                <Checkbox name="termsAndConditions" label="I agree to the terms and conditions" required />
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                sx={{ my: 2 }}
+              >
+                <Checkbox
+                  name="termsAndConditions"
+                  label="I agree to the terms and conditions"
+                  required
+                />
               </Stack>
 
-              {credentialsError && <div className="text-red-500">Error occurred during registration.</div>}
+              {credentialsError && (
+                <div className="text-red-500">
+                  Error occurred during registration.
+                </div>
+              )}
 
-              <Button fullWidth size="large" type="submit" variant="contained" disabled={isLoading}>
+              <Button
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                disabled={isLoading}
+              >
                 {isLoading ? "Registering..." : "Register"}
               </Button>
             </form>
