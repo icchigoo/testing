@@ -37,10 +37,25 @@ export const AuthProvider = ({ children }) => {
         `${base_url}user/password`, 
         { password: newPassword }, config
       );
-      // You can update the user's data here if needed
       return response.data;
     } catch (error) {
       console.error("Error updating password:", error);
+      throw new Error(error instanceof Error ? error.message : String(error));
+    }
+  };
+
+  const updateUser = async (updatedUserData) => {
+    try {
+      const response = await axios.put(
+        `${base_url}user/edit-user/`,
+        updatedUserData,
+        config
+      );
+      setUser(response.data); // Update the user in state with the updated data
+      localStorage.setItem("user", JSON.stringify(response.data)); // Update the user in local storage
+      return response.data;
+    } catch (error) {
+      console.error("Error updating user:", error);
       throw new Error(error instanceof Error ? error.message : String(error));
     }
   };
@@ -57,7 +72,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, updatePassword, logout }}>
+    <AuthContext.Provider value={{ user, login, updatePassword, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

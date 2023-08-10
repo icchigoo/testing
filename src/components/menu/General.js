@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { styled } from "@mui/material/styles";
 import { Container, Avatar, Button, TextField, Grid } from "@mui/material";
-
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUser } from "../../features/auth/authSlice";
+import { useAuthContext } from "../../context/AuthContext";
 
 const ProfileCard = styled("div")(({ theme }) => ({
   padding: theme.spacing(4),
@@ -40,26 +38,7 @@ const ProfilePictureContainer = styled("div")(({ theme }) => ({
 }));
 
 const General = () => {
-  const dispatch = useDispatch();
-
-  // Access the user profile data from the Redux store
-  const user = useSelector((state) => state.auth.user);
-  console.log(user);
-
-  // useEffect hook to fetch the user profile data when the component mounts
-  useEffect(() => {
-    if (!user) {
-      // Fetch the user profile data if it is not already available in the Redux store
-      const userId = localStorage.getItem("userId");
-      if (userId) {
-        dispatch(fetchUser(userId)); // Pass the user's _id to the fetchUser action
-      }
-    }
-  }, [dispatch, user]);
-
-  if (!user) {
-    return <div>Loading...</div>; // You can show a loading state until the user data is fetched
-  }
+  const { user } = useAuthContext();
 
   return (
     <Container>
