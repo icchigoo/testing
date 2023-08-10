@@ -46,6 +46,11 @@ const navConfig = [
     path: '/dashboard/propertys',
     icon: icon('ic_lock'),
   },
+  {
+    title: 'upload',
+    path: '/dashboard/upload',
+    icon: icon('ic_lock'),
+  },
  
 ];
 

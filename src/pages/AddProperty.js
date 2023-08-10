@@ -17,11 +17,12 @@ import {
   CardContent,
   Avatar,
   InputAdornment,
-  MenuItem
+  MenuItem,
 } from "@mui/material";
 import { CameraAlt, Close } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { usePropertyContext } from "../context/PropertyContext";
+import { useUploadImageContext } from "../context/UploadImageContext";
 
 const schema = Yup.object().shape({
   address: Yup.string().required("Address is required"),
@@ -37,21 +38,16 @@ const schema = Yup.object().shape({
 
 const AddProperty = () => {
   const { addProperty } = usePropertyContext();
-  const dispatch = useDispatch();
+  const { uploadedImages, uploadImagesToServer, deleteImageFromServer } =
+    useUploadImageContext(); // Use the UploadImageContext
   const [showAlert, setShowAlert] = useState(false);
   const [images, setImages] = useState([]);
-  const imgState = useSelector((state) => state.upload.images);
-  const img = [];
-  imgState.forEach((i) => {
-    img.push({
-      public_id: i.public_id,
-      url: i.url,
-    });
-  });
+
+
 
   useEffect(() => {
-    formik.values.images = img;
-  }, [img]);
+    setImages(uploadedImages); // Set the images from the context
+  }, [uploadedImages]);
 
   const formik = useFormik({
     initialValues: {
@@ -64,6 +60,7 @@ const AddProperty = () => {
     },
     validationSchema: schema,
     onSubmit: async (values, { resetForm }) => {
+      values.images = images;
       await addProperty(values); // Using the context function
       resetForm();
       setShowAlert(true);
@@ -117,7 +114,13 @@ const AddProperty = () => {
             py={4}
           >
             <Dropzone
-              onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
+              onDrop={(acceptedFiles) => {
+                const formData = new FormData();
+                acceptedFiles.forEach((file) => {
+                  formData.append("images", file);
+                });
+                uploadImagesToServer(formData);
+              }}
             >
               {({ getRootProps, getInputProps }) => (
                 <section>
@@ -125,8 +128,8 @@ const AddProperty = () => {
                     <input {...getInputProps()} />
                     <Avatar
                       src={
-                        imgState.length > 0
-                          ? imgState[imgState.length - 1].url
+                        uploadedImages.length > 0
+                          ? uploadedImages[uploadedImages.length - 1].url
                           : ""
                       }
                       sx={{
@@ -141,19 +144,28 @@ const AddProperty = () => {
                         justifyContent: "center",
                       }}
                     >
-                      {imgState.length === 0 ? (
+                      {uploadedImages.length === 0 ? (
                         <CameraAlt fontSize="large" color="action" />
                       ) : null}
                     </Avatar>
                   </Box>
 
-                  {imgState.length > 0 && (
+                  {uploadedImages.length > 0 && (
                     <IconButton
-                      onClick={() =>
-                        dispatch(
-                          delImg(imgState[imgState.length - 1].public_id)
-                        )
-                      }
+                      onClick={async () => {
+                        const deletedImageId =
+                          uploadedImages[uploadedImages.length - 1].public_id;
+
+                        // Send the delete request to the backend
+                        try {
+                          await deleteImageFromServer(deletedImageId);
+                          // Update local state or context with the updated image list
+                          const updatedImages = uploadedImages.slice(0, -1);
+                          setImages(updatedImages);
+                        } catch (error) {
+                          console.error("Error deleting image:", error);
+                        }
+                      }}
                       sx={{ position: "absolute", top: 5, right: 5 }}
                     >
                       <Close fontSize="small" />
