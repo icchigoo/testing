@@ -1,15 +1,13 @@
-// LoginPage.js
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { styled } from "@mui/material/styles";
 import { Link, Container, Typography, Divider, Stack, Button, IconButton, InputAdornment, TextField, Checkbox } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { login } from "../features/auth/authSlice";
 import Logo from "../components/logo";
 import Iconify from "../components/iconify";
-import authService from "../features/auth/authService";
+import { useAuthContext } from "../context/AuthContext"; // Import the useAuth hook
+
 const StyledRoot = styled("div")(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
     display: "flex",
@@ -37,11 +35,12 @@ const StyledContent = styled("div")(({ theme }) => ({
 }));
 
 export default function LoginPage() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [credentialsError, setCredentialsError] = useState(false);
+
+  const { login } = useAuthContext(); // Use the useAuth hook
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,9 +50,8 @@ export default function LoginPage() {
 
     try {
       setIsLoading(true);
-      const response = await authService.login({ email, password });
+      const response = await login({ email, password }); // Use the login function from the context
       if (response !== null) {
-        dispatch(login({ email, password }));
         navigate("/dashboard", { replace: true });
       } else {
         setCredentialsError(true);
