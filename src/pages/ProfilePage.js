@@ -2,7 +2,7 @@ import React, {  useState } from "react";
 import {} from "@mui/material/styles";
 import { Container, Typography, Button, Stack } from "@mui/material";
 import Iconify from "../components/iconify";
-import {  useSelector } from "react-redux";
+import { useAuthContext } from "../context/AuthContext";
 
 import ProfileEditForm from "../components/Profile/ProfileEditForm";
 import MenuBar from "../components/menu/MeunBar";
@@ -14,10 +14,13 @@ const ProfilePage = () => {
 
 
   // Access the user profile data from the Redux store
-  const user = useSelector((state) => state.auth.user);
+  const { user } = useAuthContext();
+
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, ] = useState({ ...user });
   const [selectedTab, setSelectedTab] = useState(0);
+
+  console.log("User from context:", user);
 
   const handleEditProfile = () => {
     setIsEditing(true);
