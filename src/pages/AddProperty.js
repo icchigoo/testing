@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
+
 import Dropzone from "react-dropzone";
-import { delImg, uploadImg } from "../features/upload/uploadSlice";
+
 import {
   Container,
   Typography,
