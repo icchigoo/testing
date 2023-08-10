@@ -10,6 +10,7 @@ import ThemeProvider from './theme';
 import { StyledChart } from './components/chart';
 import ScrollToTop from './components/scroll-to-top';
 import { PropertyProvider } from './context/PropertyContext';
+import { AuthProvider } from './context/AuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -17,6 +18,7 @@ export default function App() {
   return (
     <HelmetProvider>
       <Provider store={store}> 
+      <AuthProvider>
       <PropertyProvider>
         <BrowserRouter>
           <ThemeProvider>
@@ -26,6 +28,7 @@ export default function App() {
           </ThemeProvider>
         </BrowserRouter>
         </PropertyProvider>
+        </AuthProvider>
       </Provider>
     </HelmetProvider>
   );
