@@ -10,7 +10,6 @@ export const useAuthContext = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Check local storage for user data when the component is first rendered
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
@@ -23,7 +22,7 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.post(`${base_url}user/login`, userData);
       const loggedInUser = response.data;
       setUser(loggedInUser);
-      localStorage.setItem("user", JSON.stringify(loggedInUser)); // Store user data in local storage
+      localStorage.setItem("user", JSON.stringify(loggedInUser));
       return loggedInUser;
     } catch (error) {
       console.error("Error logging in:", error);
@@ -34,8 +33,9 @@ export const AuthProvider = ({ children }) => {
   const updatePassword = async (newPassword) => {
     try {
       const response = await axios.put(
-        `${base_url}user/password`, 
-        { password: newPassword }, config
+        `${base_url}user/password`,
+        { password: newPassword },
+        config
       );
       return response.data;
     } catch (error) {
@@ -51,8 +51,8 @@ export const AuthProvider = ({ children }) => {
         updatedUserData,
         config
       );
-      setUser(response.data); // Update the user in state with the updated data
-      localStorage.setItem("user", JSON.stringify(response.data)); // Update the user in local storage
+      setUser(response.data);
+      localStorage.setItem("user", JSON.stringify(response.data));
       return response.data;
     } catch (error) {
       console.error("Error updating user:", error);
@@ -60,11 +60,23 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const createUser = async (newUserData) => {
+    try {
+      const response = await axios.post(`${base_url}user/register`, newUserData);
+      const createdUser = response.data;
+      setUser(createdUser);
+      localStorage.setItem("user", JSON.stringify(createdUser));
+      return createdUser;
+    } catch (error) {
+      console.error("Error creating user:", error);
+      throw new Error(error instanceof Error ? error.message : String(error));
+    }
+  };
+
   const logout = async () => {
     try {
-      // Clear the user data
       setUser(null);
-      localStorage.removeItem("user"); // Remove user data from local storage
+      localStorage.removeItem("user");
     } catch (error) {
       console.error("Error logging out:", error);
       throw new Error(error instanceof Error ? error.message : String(error));
@@ -72,7 +84,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, updatePassword, logout, updateUser }}>
+    <AuthContext.Provider
+      value={{ user, login, updatePassword, logout, updateUser, createUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

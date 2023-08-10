@@ -13,72 +13,7 @@ const initialState = {
   message: "",
 };
 
-export const login = createAsyncThunk(
-  "auth/login",
-  async (userData, thunkAPI) => {
-    try {
-      return await authService.login(userData);
-    } catch (error) {
-      if (error instanceof Error) {
-        return thunkAPI.rejectWithValue(error);
-      } else {
-        return thunkAPI.rejectWithValue(String(error));
-      }
-    }
-  }
-);
 
-export const fetchUser = createAsyncThunk(
-  "auth/fetchUser",
-  async (_, thunkAPI) => {
-    try {
-      const userId = localStorage.getItem("userId");
-      if (userId !== null) {
-        return await authService.getUserById(userId);
-      } else {
-        // Handle the case when userId is null
-        return null;
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        return thunkAPI.rejectWithValue(error);
-      } else {
-        return thunkAPI.rejectWithValue(String(error));
-      }
-    }
-  }
-);
-
-export const updatePassword = createAsyncThunk(
-  "auth/updatePassword",
-  async (newPassword, thunkAPI) => {
-    try {
-      const response = await authService.updatePassword(newPassword);
-      return response; // Return the relevant response data
-    } catch (error) {
-      if (error instanceof Error) {
-        return thunkAPI.rejectWithValue(error.message);
-      } else {
-        return thunkAPI.rejectWithValue(String(error));
-      }
-    }
-  }
-);
-
-export const createUser = createAsyncThunk(
-  "auth/createUser",
-  async (userData, thunkAPI) => {
-    try {
-      return await authService.createUser(userData);
-    } catch (error) {
-      if (error instanceof Error) {
-        return thunkAPI.rejectWithValue(error);
-      } else {
-        return thunkAPI.rejectWithValue(String(error));
-      }
-    }
-  }
-);
 
 export const updateUser = createAsyncThunk(
   "auth/updateUser",
@@ -103,12 +38,6 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-export const logout = () => (dispatch) => {
-  // Clear user data from the Redux store and local storage
-  dispatch(authSlice.actions.clearUser());
-  localStorage.removeItem("user"); // Remove user data from local storage
-};
-
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -120,68 +49,8 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(login.fulfilled, (state, action) => {
-        state.isError = false;
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.user = action.payload;
-        state.message = "success";
-      })
-      .addCase(login.rejected, (state, action) => {
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error instanceof Error ? action.error.message : String(action.error);
-        state.isLoading = false;
-      })
-      .addCase(createUser.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(createUser.fulfilled, (state, action) => {
-        state.isError = false;
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.user = action.payload;
-        state.message = "User created successfully"; // Optionally, you can set a success message here
-      })
-      .addCase(createUser.rejected, (state, action) => {
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error instanceof Error ? action.error.message : String(action.error);
-        state.isLoading = false;
-      })
-      .addCase(fetchUser.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(fetchUser.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.isSuccess = true;
-        state.user = action.payload;
-      })
-      .addCase(fetchUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error instanceof Error ? action.error.message : String(action.error);
-      })
-      .addCase(updatePassword.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(updatePassword.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.isSuccess = true;
-        state.message = "Password updated successfully";
-      })
-      .addCase(updatePassword.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error instanceof Error ? action.error.message : String(action.error);
-      })
+
+      
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;
       })
@@ -195,7 +64,10 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.message = action.error instanceof Error ? action.error.message : String(action.error);
+        state.message =
+          action.error instanceof Error
+            ? action.error.message
+            : String(action.error);
       });
   },
 });

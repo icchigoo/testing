@@ -6,6 +6,7 @@ import { Link, Container, Typography, Stack, Button, TextField, Checkbox } from 
 import { useDispatch } from "react-redux";
 import { createUser } from "../features/auth/authSlice";
 import Logo from "../components/logo";
+import { useAuthContext } from "../context/AuthContext";
 
 const StyledRoot = styled("div")(({ theme }) => ({
     [theme.breakpoints.up("md")]: {
@@ -36,7 +37,7 @@ const StyledRoot = styled("div")(({ theme }) => ({
 
 
 export default function RegisterPage() {
-  const dispatch = useDispatch();
+  const authContext = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
   const [credentialsError, setCredentialsError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -47,13 +48,14 @@ export default function RegisterPage() {
     const firstname = formData.get("firstname");
     const lastname = formData.get("lastname");
     const email = formData.get("email");
+    const mobile = formData.get("mobile");
     const password = formData.get("password");
     // Extract other form data for registration, if needed
 
     try {
       setIsLoading(true);
-      // Call the createUser action to register the user
-      const response = await dispatch(createUser({ firstname, lastname, email, password }));
+      // Use the createUser function from the authentication context
+      const response = await authContext.createUser({ firstname, lastname, email, password, mobile });
       if (response !== null) {
         // Handle successful registration (e.g., show a success message, redirect to dashboard)
       } else {
@@ -65,7 +67,7 @@ export default function RegisterPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   return (
     <>
@@ -106,6 +108,7 @@ export default function RegisterPage() {
                 <TextField name="firstname" label="First Name" required />
                 <TextField name="lastname" label="Last Name" required />
                 <TextField name="email" label="Email address" required />
+                <TextField name="mobile" label="Mobile" required />
                 <TextField
                   name="password"
                   label="Password"
