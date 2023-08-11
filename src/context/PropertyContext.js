@@ -3,6 +3,8 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { base_url } from "../utils/baseUrl";
 import { config } from "../utils/config";
+import { useAuthContext } from "./AuthContext";
+import instance from "../utils/axiosInstance";
 
 // Create a context to manage property-related data
 const PropertyContext = createContext();
@@ -14,12 +16,13 @@ export const usePropertyContext = () => useContext(PropertyContext);
 export const PropertyProvider = ({ children }) => {
   // State to store the list of properties
   const [properties, setProperties] = useState([]);
+  const { user } = useAuthContext();
 
   // Function to fetch properties from the API
   const fetchProperties = async () => {
     try {
       // Send a GET request to the API to fetch property data
-      const response = await axios.get(`${base_url}property`, config);
+      const response = await instance.get(`${base_url}property`);
       const data = response.data;
 
       // Update the properties state with the fetched property data
@@ -63,8 +66,12 @@ export const PropertyProvider = ({ children }) => {
 
   // Fetch properties from the API when the component mounts
   useEffect(() => {
-    fetchProperties();
-  }, []);
+    if (user !== null) {
+      fetchProperties();
+    } else {
+      setProperties([]); // Clear properties when the user is null
+    }
+  }, [user]);
 
   // Provide property-related data and actions through the context
   return (
