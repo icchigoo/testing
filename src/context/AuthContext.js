@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { base_url } from "../utils/baseUrl";
-import { config } from "../utils/config";
+import instance from "../utils/axiosInstance";
 
 const AuthContext = createContext();
 
@@ -32,10 +32,9 @@ export const AuthProvider = ({ children }) => {
 
   const updatePassword = async (newPassword) => {
     try {
-      const response = await axios.put(
+      const response = await instance.put(
         `${base_url}user/password`,
-        { password: newPassword },
-        config
+        { password: newPassword }
       );
       return response.data;
     } catch (error) {
@@ -46,10 +45,9 @@ export const AuthProvider = ({ children }) => {
 
   const updateUser = async (updatedUserData) => {
     try {
-      const response = await axios.put(
+      const response = await instance.put(
         `${base_url}user/edit-user/`,
-        updatedUserData,
-        config
+        updatedUserData
       );
       setUser(response.data);
       localStorage.setItem("user", JSON.stringify(response.data));
@@ -62,7 +60,7 @@ export const AuthProvider = ({ children }) => {
 
   const createUser = async (newUserData) => {
     try {
-      const response = await axios.post(`${base_url}user/register`, newUserData);
+      const response = await instance.post(`${base_url}user/register`, newUserData);
       const createdUser = response.data;
       setUser(createdUser);
       localStorage.setItem("user", JSON.stringify(createdUser));

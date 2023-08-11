@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
-import axios from "axios";
+import instance from "../utils/axiosInstance"; 
 import { base_url } from "../utils/baseUrl";
-import { config } from "../utils/config";
 
 const UploadImageContext = createContext();
 
@@ -20,8 +19,7 @@ export const UploadImageProvider = ({ children }) => {
 
   const uploadImagesToServer = async (data) => {
     try {
-      const response = await axios.post(`${base_url}upload/`, data, config);
-      // Assuming the server responds with the uploaded image URLs
+      const response = await instance.post(`${base_url}upload/`, data); // Use the instance here
       const uploadedImageUrls = response.data;
       addUploadedImages(uploadedImageUrls);
       return uploadedImageUrls;
@@ -33,8 +31,7 @@ export const UploadImageProvider = ({ children }) => {
 
   const deleteImageFromServer = async (id) => {
     try {
-      await axios.delete(`${base_url}upload/delete-img/${id}`, config);
-      // Assuming successful deletion, remove the image from state
+      await instance.delete(`${base_url}upload/delete-img/${id}`); // Use the instance here
       setUploadedImages((prevImages) =>
         prevImages.filter((image) => image.id !== id)
       );

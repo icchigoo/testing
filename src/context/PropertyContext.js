@@ -36,7 +36,7 @@ export const PropertyProvider = ({ children }) => {
   const addProperty = async (propertyData) => {
     try {
       // Send a POST request to the API to create a new property
-      const response = await axios.post(`${base_url}property`, propertyData, config);
+      const response = await instance.post(`${base_url}property`, propertyData);
       const createdProperty = response.data;
 
       // Update the properties state to include the newly created property
@@ -50,7 +50,7 @@ export const PropertyProvider = ({ children }) => {
   const editProperty = async (id, updatedProperty) => {
     try {
       // Send a PATCH request to the API to update an existing property
-      const response = await axios.patch(`${base_url}property/${id}`, updatedProperty, config);
+      const response = await instance.patch(`${base_url}property/${id}`, updatedProperty);
       const editedProperty = response.data;
 
       // Update the properties state to reflect the changes
